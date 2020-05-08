@@ -87,6 +87,7 @@ impl From<io::Error> for CliError {
         CliError::IoError(err)
     }
 }
+
 impl From<serde_yaml::Error> for CliError {
     fn from(err: serde_yaml::Error) -> Self {
         CliError::InvalidYamlError(err.to_string())

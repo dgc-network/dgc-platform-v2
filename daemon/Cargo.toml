@@ -45,13 +45,17 @@ log = "0.4"
 protobuf = "2"
 #reqwest = { version = "0.10.1", optional = true, features = ["json", "blocking"] }
 reqwest = { version = "0.10.1", features = ["json", "blocking"] }
-sabre-sdk = { version = "0.5", optional = true }
+#sabre-sdk = { version = "0.5", optional = true }
+sabre-sdk = { version = "0.5" }
 sawtooth-sdk = { version = "0.4", features = ["transact-compat"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 transact = { version = "0.2", optional = true }
 url = "2.1"
 uuid = { version = "0.6", features = ["v4"] }
+
+rust-crypto = "0.2"
+users = "0.9"
 
 [dependencies.splinter]
 git = "https://github.com/Cargill/splinter"
@@ -67,7 +71,7 @@ experimental = ["splinter-support"]
 
 sawtooth-support = []
 #splinter-support = ["splinter", "reqwest", "sabre-sdk", "transact", "transact/contract-archive"]
-splinter-support = ["splinter", "sabre-sdk", "transact", "transact/contract-archive"]
+splinter-support = ["splinter", "transact", "transact/contract-archive"]
 test-api = []
 
 [package.metadata.deb]
