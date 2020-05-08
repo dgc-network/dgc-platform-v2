@@ -25,7 +25,7 @@ use crate::rest_api::routes::DbExecutor;
 use crate::rest_api::routes::{
     fetch_agent, fetch_grid_schema, fetch_organization, fetch_product, fetch_record,
     fetch_record_property, get_batch_statuses, list_agents, list_grid_schemas, list_organizations,
-    list_products, list_records, submit_batches,
+    list_products, list_records, submit_batches, create_agent, update_agent,
 };
 use crate::submitter::BatchSubmitter;
 use actix::{Addr, SyncArbiter};
