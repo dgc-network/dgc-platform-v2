@@ -130,7 +130,7 @@ pub async fn fetch_agent(
         .map(|agent| HttpResponse::Ok().json(agent))
 }
 
-use crate::error::CliError;
+//use crate::error::CliError;
 use crate::http::submit_batches;
 use crate::transaction::{pike_batch_builder, PIKE_NAMESPACE};
 use grid_sdk::{
