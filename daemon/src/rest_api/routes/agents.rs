@@ -159,7 +159,9 @@ pub fn create_agent(
         )?
         .create_batch_list();
 
-    submit_batches(url, wait, &batch_list, service_id.as_deref())
+    submit_batches(url, wait, &batch_list, service_id.as_deref());
+
+    HttpResponse.Ok()
 }
 
 pub fn update_agent(
@@ -183,5 +185,7 @@ pub fn update_agent(
         )?
         .create_batch_list();
 
-    submit_batches(url, wait, &batch_list, service_id.as_deref())
+    submit_batches(url, wait, &batch_list, service_id.as_deref());
+
+    HttpResponse.Ok()
 }
