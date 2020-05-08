@@ -145,6 +145,8 @@ pub fn run(
                     )
                     .service(
                         web::scope("/agent")
+                            .service(web::resource("").route(web::post().to(create_agent)))
+                            .service(web::resource("").route(web::put().to(update_agent)))
                             .service(web::resource("").route(web::get().to(list_agents)))
                             .service(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
