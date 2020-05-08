@@ -16,7 +16,7 @@
  */
 
 //use crate::CliError;
-use crate::rest_api::error::RestApiResponseError as CliError;
+use crate::rest_api::error::RestApiResponseError;
 use protobuf::Message;
 use reqwest::Client;
 use sawtooth_sdk::messages::batch::BatchList;
@@ -29,7 +29,8 @@ pub fn submit_batches(
     mut wait: u64,
     batch_list: &BatchList,
     service_id: Option<&str>,
-) -> Result<(), CliError> {
+//) -> Result<(), CliError> {
+) -> Result<HttpResponse, RestApiResponseError> {
     let bytes = batch_list.write_to_bytes()?;
 
     let client = Client::new();
@@ -64,7 +65,8 @@ pub fn submit_batches(
         wait -= time.elapsed().as_secs()
     }
 
-    Ok(())
+    //Ok(())
+    HttpResponse::Ok()
 }
 
 // Server Responses
