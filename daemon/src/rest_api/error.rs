@@ -28,6 +28,7 @@ use std::fmt;
 use grid_sdk::protos;
 use sawtooth_sdk::signing;
 use std::io;
+use sawtooth_sdk::messaging::stream::SendError;
 
 #[derive(Debug)]
 pub enum RestApiServerError {
@@ -71,6 +72,7 @@ pub enum RestApiResponseError {
     IoError(io::Error),
     ProtobufError(protobuf::ProtobufError),
     SigningError(signing::Error),
+    SendError(SendError),
     GridProtoError(protos::ProtoConversionError),
     SabreProtoError(sabre_sdk::protos::ProtoConversionError),
 }
@@ -88,6 +90,7 @@ impl Error for RestApiResponseError {
             RestApiResponseError::IoError(err) => Some(err),
             RestApiResponseError::ProtobufError(err) => Some(err),
             RestApiResponseError::SigningError(err) => Some(err),
+            RestApiResponseError::SendError(err) => Some(err),
             RestApiResponseError::GridProtoError(err) => Some(err),
             RestApiResponseError::SabreProtoError(err) => Some(err),
         }
@@ -113,6 +116,7 @@ impl fmt::Display for RestApiResponseError {
             RestApiResponseError::IoError(ref err) => write!(f, "IoError: {}", err),
             RestApiResponseError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
             RestApiResponseError::SigningError(ref err) => write!(f, "SigningError: {}", err),
+            RestApiResponseError::SendError(ref err) => write!(f, "SendError: {}", err),
             RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
             RestApiResponseError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
         }
@@ -230,6 +234,12 @@ impl From<protobuf::ProtobufError> for RestApiResponseError {
 impl From<signing::Error> for RestApiResponseError {
     fn from(err: signing::Error) -> Self {
         RestApiResponseError::SigningError(err)
+    }
+}
+
+impl From<SendError> for RestApiResponseError {
+    fn from(err: SendError) -> Self {
+        RestApiResponseError::SendError(err)
     }
 }
 
