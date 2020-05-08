@@ -44,7 +44,7 @@ pub fn submit_batches(
     let batch_link = client
         .post(&final_url)
         .body(bytes)
-        .send()?
+        .send()
         .json::<BatchStatusLink>()?;
 
     debug!("Response: {:#?}", batch_link);
@@ -54,7 +54,7 @@ pub fn submit_batches(
 
         let batch_status = client
             .get(&format!("{}&wait={}", batch_link.link, wait))
-            .send()?
+            .send()
             .json::<BatchStatusResponse>()?;
 
         debug!("Batch Status: {:#?}", batch_status);
