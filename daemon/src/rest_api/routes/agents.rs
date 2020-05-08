@@ -79,7 +79,7 @@ pub async fn list_agents(
         .send(ListAgents {
             service_id: query.into_inner().service_id,
         })
-        .await?
+        .await
         .map(|agents| HttpResponse::Ok().json(agents))
 }
 
