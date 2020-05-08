@@ -23,7 +23,7 @@ use sawtooth_sdk::messages::batch::BatchList;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::time::Instant;
-use actix_web::{web, HttpResponse};
+use actix_web::HttpResponse;
 
 pub fn submit_batches(
     url: &str,
