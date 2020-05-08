@@ -70,7 +70,7 @@ pub enum RestApiResponseError {
     UserError(String),
     IoError(io::Error),
     ProtobufError(protobuf::ProtobufError),
-    SigningError(signing::Error),
+    //SigningError(signing::Error),
     GridProtoError(protos::ProtoConversionError),
     SabreProtoError(sabre_sdk::protos::ProtoConversionError),
 }
@@ -87,7 +87,7 @@ impl Error for RestApiResponseError {
             RestApiResponseError::UserError(_) => None,
             RestApiResponseError::IoError(err) => Some(err),
             RestApiResponseError::ProtobufError(err) => Some(err),
-            RestApiResponseError::SigningError(err) => Some(err),
+            //RestApiResponseError::SigningError(err) => Some(err),
             RestApiResponseError::GridProtoError(err) => Some(err),
             RestApiResponseError::SabreProtoError(err) => Some(err),
         }
@@ -112,7 +112,7 @@ impl fmt::Display for RestApiResponseError {
             RestApiResponseError::UserError(ref err) => write!(f, "Error: {}", err),
             RestApiResponseError::IoError(ref err) => write!(f, "IoError: {}", err),
             RestApiResponseError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
-            RestApiResponseError::SigningError(ref err) => write!(f, "SigningError: {}", err),
+            //RestApiResponseError::SigningError(ref err) => write!(f, "SigningError: {}", err),
             RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
             RestApiResponseError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
         }
