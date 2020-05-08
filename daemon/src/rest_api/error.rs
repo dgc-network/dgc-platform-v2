@@ -63,6 +63,8 @@ pub enum RestApiResponseError {
     RequestHandlerError(String),
     DatabaseError(String),
     NotFoundError(String),
+    UserError(String),
+    //SigningError(signing::Error),
 }
 
 impl Error for RestApiResponseError {
@@ -74,6 +76,7 @@ impl Error for RestApiResponseError {
             RestApiResponseError::RequestHandlerError(_) => None,
             RestApiResponseError::DatabaseError(_) => None,
             RestApiResponseError::NotFoundError(_) => None,
+            RestApiResponseError::UserError(_) => None,
         }
     }
 }
@@ -93,6 +96,7 @@ impl fmt::Display for RestApiResponseError {
             }
             RestApiResponseError::NotFoundError(ref s) => write!(f, "Not Found Error: {}", s),
             RestApiResponseError::DatabaseError(ref s) => write!(f, "Database Error: {}", s),
+            RestApiResponseError::UserError(ref err) => write!(f, "Error: {}", err),
         }
     }
 }
@@ -115,7 +119,9 @@ impl RestApiResponseError {
                     .into_future(),
             ),
             RestApiResponseError::NotFoundError(ref message) => {
-                Box::new(HttpResponse::NotFound().json(message).into_future())
+                Box::new(HttpResponse::NotFound()
+                .json(message)
+                .into_future())
             }
             _ => Box::new(
                 HttpResponse::InternalServerError()

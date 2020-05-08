@@ -14,6 +14,7 @@
 
 pub mod error;
 mod routes;
+mod http;
 
 use std::sync::mpsc;
 use std::thread;

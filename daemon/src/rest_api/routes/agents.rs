@@ -131,26 +131,25 @@ pub async fn fetch_agent(
 }
 
 //use crate::error::CliError;
-use crate::http::submit_batches;
-use crate::transaction::{pike_batch_builder, PIKE_NAMESPACE};
+use crate::rest_api::http::submit_batches;
+use crate::rest_api::transaction::{pike_batch_builder, PIKE_NAMESPACE};
 use grid_sdk::{
     protocol::pike::payload::{Action, CreateAgentAction, PikePayloadBuilder, UpdateAgentAction},
     protos::IntoProto,
 };
 
-pub async fn create_agent(
+pub fn create_agent(
     url: &str,
     key: Option<String>,
     wait: u64,
     create_agent: CreateAgentAction,
     service_id: Option<String>,
-//) -> Result<(), CliError> {
 ) -> Result<HttpResponse, RestApiResponseError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::CreateAgent)
         .with_create_agent(create_agent)
         .build()
-        .map_err(|err| CliError::UserError(format!("{}", err)))?;
+        .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
 
     let batch_list = pike_batch_builder(key)
         .add_transaction(
@@ -163,19 +162,18 @@ pub async fn create_agent(
     submit_batches(url, wait, &batch_list, service_id.as_deref())
 }
 
-pub async fn update_agent(
+pub fn update_agent(
     url: &str,
     key: Option<String>,
     wait: u64,
     update_agent: UpdateAgentAction,
     service_id: Option<String>,
-//) -> Result<(), CliError> {
 ) -> Result<HttpResponse, RestApiResponseError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::UpdateAgent)
         .with_update_agent(update_agent)
         .build()
-        .map_err(|err| CliError::UserError(format!("{}", err)))?;
+        .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
 
     let batch_list = pike_batch_builder(key)
         .add_transaction(
