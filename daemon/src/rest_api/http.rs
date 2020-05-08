@@ -67,7 +67,7 @@ pub fn submit_batches(
     }
 
     //Ok(())
-    HttpResponse::Ok()
+    Ok(HttpResponse::Ok())
 }
 
 // Server Responses
