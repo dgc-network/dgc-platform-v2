@@ -67,7 +67,7 @@ pub fn submit_batches(
     }
 
     //Ok(())
-    Ok(HttpResponse::Ok())
+    Ok(HttpResponse::Ok().json("status:done"))
 }
 
 // Server Responses
