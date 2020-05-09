@@ -22,6 +22,7 @@ use crate::protos;
 use crate::protos::{
     FromBytes, FromNative, FromProto, IntoBytes, IntoNative, IntoProto, ProtoConversionError,
 };
+use actix_web::FromRequest;
 
 /// Native implementation for PikePayload_Action
 #[derive(Debug, Clone, PartialEq)]
