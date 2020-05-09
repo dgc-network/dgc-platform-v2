@@ -71,7 +71,7 @@ pub enum RestApiResponseError {
     UserError(String),
     IoError(io::Error),
     ProtobufError(protobuf::ProtobufError),
-    SigningError(signing::Error),
+    //SigningError(signing::Error),
     SendError(SendError),
     GridProtoError(protos::ProtoConversionError),
     SabreProtoError(sabre_sdk::protos::ProtoConversionError),
