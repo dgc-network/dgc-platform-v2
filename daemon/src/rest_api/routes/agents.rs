@@ -170,6 +170,7 @@ pub async fn do_create_agent(
     req: HttpRequest,
     body: web::Bytes,
     state: web::Data<AppState>,
+    create_agent: CreateAgentAction,
     query_service_id: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
 ) -> Result<HttpResponse, RestApiResponseError> {
