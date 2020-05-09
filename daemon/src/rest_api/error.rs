@@ -142,8 +142,8 @@ impl RestApiResponseError {
             ),
             RestApiResponseError::NotFoundError(ref message) => {
                 Box::new(HttpResponse::NotFound()
-                .json(message)
-                .into_future())
+                    .json(message)
+                    .into_future())
             }
             _ => Box::new(
                 HttpResponse::InternalServerError()
@@ -230,7 +230,7 @@ impl From<protobuf::ProtobufError> for RestApiResponseError {
         RestApiResponseError::ProtobufError(err)
     }
 }
-
+/*
 impl From<signing::Error> for RestApiResponseError {
     fn from(err: signing::Error) -> Self {
         RestApiResponseError::SigningError(err)
@@ -242,7 +242,7 @@ impl From<SendError> for RestApiResponseError {
         RestApiResponseError::SendError(err)
     }
 }
-
+*/
 impl From<protos::ProtoConversionError> for RestApiResponseError {
     fn from(err: protos::ProtoConversionError) -> Self {
         RestApiResponseError::GridProtoError(err)
