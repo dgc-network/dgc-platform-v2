@@ -14,7 +14,7 @@
 
 pub mod error;
 mod routes;
-mod http;
+//mod http;
 mod key;
 mod transaction;
 
