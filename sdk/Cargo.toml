@@ -26,10 +26,10 @@ homepage = "https://grid.hyperledger.org"
 edition = "2018"
 license = "Apache-2.0"
 
-
 [dependencies]
 protobuf = "2"
 cfg-if = "0.1"
+actix-web = "2.0"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 rust-crypto-wasm = "0.3"
