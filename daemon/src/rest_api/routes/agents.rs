@@ -168,8 +168,10 @@ pub fn create_agent(
 */
 pub async fn do_create_agent(
     req: HttpRequest,
-    body: web::Bytes,
+    //body: web::Bytes,
     state: web::Data<AppState>,
+    key: Option<String>,
+    create_agent: CreateAgentAction,
     query_service_id: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
 ) -> Result<HttpResponse, RestApiResponseError> {
@@ -179,7 +181,7 @@ pub async fn do_create_agent(
         .build()
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
 
-    let batch_list = pike_batch_builder(key)
+    let transaction = pike_batch_builder(key)
         .add_transaction(
             &payload.into_proto()?,
             &[PIKE_NAMESPACE.to_string()],
@@ -187,7 +189,7 @@ pub async fn do_create_agent(
         )?
         .create_batch_list();
 
-    //let bytes = batch_list.write_to_bytes()?;
+    let body = transaction.write_to_bytes()?;
 
     let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
         Ok(batch_list) => batch_list,
