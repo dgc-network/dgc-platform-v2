@@ -170,10 +170,7 @@ pub async fn do_create_agent(
     req: HttpRequest,
     //body: web::Bytes,
     state: web::Data<AppState>,
-<<<<<<< HEAD
     key: Option<String>,
-=======
->>>>>>> 6f92d3d06d78af89f38fb30eee82077c6fe9584b
     create_agent: CreateAgentAction,
     query_service_id: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
