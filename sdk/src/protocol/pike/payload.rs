@@ -185,6 +185,18 @@ impl FromRequest for CreateAgentAction {
     type Config = ();
 
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
+        Ok(CreateAgentAction {
+            org_id: req.get_org_id().to_string(),
+            public_key: req.get_public_key().to_string(),
+            active: req.get_active(),
+            roles: req.get_roles().to_vec(),
+            metadata: req
+                .get_metadata()
+                .to_vec()
+                .into_iter()
+                .map(KeyValueEntry::from_proto)
+                .collect::<Result<Vec<KeyValueEntry>, ProtoConversionError>>()?,
+        })
 /*
         if rand::random() {
             ok(CreateAgentAction { name: "thingy".into() })
