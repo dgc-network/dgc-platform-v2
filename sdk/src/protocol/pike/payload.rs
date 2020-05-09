@@ -22,7 +22,12 @@ use crate::protos;
 use crate::protos::{
     FromBytes, FromNative, FromProto, IntoBytes, IntoNative, IntoProto, ProtoConversionError,
 };
-use actix_web::FromRequest;
+
+use actix_web::{web, dev, App, Error, HttpRequest, FromRequest};
+use actix_web::error::ErrorBadRequest;
+use futures::future::{ok, err, Ready};
+use serde_derive::Deserialize;
+use rand;
 
 /// Native implementation for PikePayload_Action
 #[derive(Debug, Clone, PartialEq)]
@@ -174,20 +179,19 @@ impl IntoBytes for CreateAgentAction {
 impl IntoProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {}
 impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {}
 
-//impl FromRequest for CreateAgentAction {}
-
 impl FromRequest for CreateAgentAction {
     type Error = Error;
     type Future = Ready<Result<Self, Self::Error>>;
     type Config = ();
 
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
+/*
         if rand::random() {
             ok(CreateAgentAction { name: "thingy".into() })
         } else {
             err(ErrorBadRequest("no luck"))
         }
-
+*/
     }
 }
 
