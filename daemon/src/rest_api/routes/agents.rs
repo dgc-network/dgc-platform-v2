@@ -166,7 +166,7 @@ pub fn create_agent(
     Ok(HttpResponse::Ok().json("status:done"))
 }
 */
-pub async fn create_agent(
+pub async fn do_create_agent(
     req: HttpRequest,
     body: web::Bytes,
     state: web::Data<AppState>,
@@ -212,7 +212,7 @@ pub async fn create_agent(
         .map(|link| HttpResponse::Ok().json(link))
 }
 
-pub async fn update_agent(
+pub async fn do_update_agent(
     req: HttpRequest,
     body: web::Bytes,
     state: web::Data<AppState>,
