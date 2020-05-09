@@ -161,7 +161,7 @@ pub fn create_agent(
 
     submit_batches(url, wait, &batch_list, service_id.as_deref());
 
-    HttpResponse::Ok()
+    Ok(HttpResponse::Ok())
 }
 
 pub fn update_agent(
@@ -187,5 +187,5 @@ pub fn update_agent(
 
     submit_batches(url, wait, &batch_list, service_id.as_deref());
 
-    HttpResponse::Ok()
+    Ok(HttpResponse::Ok())
 }
