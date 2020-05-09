@@ -181,7 +181,7 @@ pub async fn do_create_agent(
         .build()
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
 
-    let transaction = pike_batch_builder(key)
+    let trans = pike_batch_builder(key)
         .add_transaction(
             &payload.into_proto()?,
             &[PIKE_NAMESPACE.to_string()],
@@ -189,7 +189,7 @@ pub async fn do_create_agent(
         )?
         .create_batch_list();
 
-    let body = transaction.write_to_bytes()?;
+    let body = trans.write_to_bytes()?;
 
     let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
         Ok(batch_list) => batch_list,
