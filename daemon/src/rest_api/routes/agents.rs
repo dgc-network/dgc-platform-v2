@@ -137,7 +137,7 @@ use grid_sdk::{
     protocol::pike::payload::{Action, CreateAgentAction, PikePayloadBuilder, UpdateAgentAction},
     protos::IntoProto,
 };
-
+/*
 pub fn create_agent(
     url: &str,
     key: Option<String>,
@@ -163,7 +163,67 @@ pub fn create_agent(
 
     Ok(HttpResponse::Ok().json("status:done"))
 }
+*/
+pub async fn create_agent(
+    req: HttpRequest,
+    body: web::Bytes,
+    state: web::Data<AppState>,
+    query_service_id: web::Query<QueryServiceId>,
+    _: AcceptServiceIdParam,
+) -> Result<HttpResponse, RestApiResponseError> {
+    let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
+        Ok(batch_list) => batch_list,
+        Err(err) => {
+            return Err(RestApiResponseError::BadRequest(format!(
+                "Protobuf message was badly formatted. {}",
+                err.to_string()
+            )));
+        }
+    };
 
+    let response_url = req.url_for_static("batch_statuses")?;
+
+    state
+        .batch_submitter
+        .submit_batches(SubmitBatches {
+            batch_list,
+            response_url,
+            service_id: query_service_id.into_inner().service_id,
+        })
+        .await
+        .map(|link| HttpResponse::Ok().json(link))
+}
+
+pub async fn update_agent(
+    req: HttpRequest,
+    body: web::Bytes,
+    state: web::Data<AppState>,
+    query_service_id: web::Query<QueryServiceId>,
+    _: AcceptServiceIdParam,
+) -> Result<HttpResponse, RestApiResponseError> {
+    let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
+        Ok(batch_list) => batch_list,
+        Err(err) => {
+            return Err(RestApiResponseError::BadRequest(format!(
+                "Protobuf message was badly formatted. {}",
+                err.to_string()
+            )));
+        }
+    };
+
+    let response_url = req.url_for_static("batch_statuses")?;
+
+    state
+        .batch_submitter
+        .submit_batches(SubmitBatches {
+            batch_list,
+            response_url,
+            service_id: query_service_id.into_inner().service_id,
+        })
+        .await
+        .map(|link| HttpResponse::Ok().json(link))
+}
+/*
 pub fn update_agent(
     url: &str,
     key: Option<String>,
@@ -189,3 +249,4 @@ pub fn update_agent(
 
     Ok(HttpResponse::Ok().json("status:done"))
 }
+*/
