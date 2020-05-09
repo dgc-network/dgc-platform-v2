@@ -32,6 +32,7 @@ cfg-if = "0.1"
 actix-web = "2.0"
 futures = "0.3.5"
 serde_derive = "1.0.107"
+rand = "0.7.3"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 rust-crypto-wasm = "0.3"
