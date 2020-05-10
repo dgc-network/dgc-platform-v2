@@ -23,11 +23,12 @@ use crate::protos::{
     FromBytes, FromNative, FromProto, IntoBytes, IntoNative, IntoProto, ProtoConversionError,
 };
 
-use actix_web::{web, dev, App, Error, HttpRequest, FromRequest};
-use actix_web::error::ErrorBadRequest;
-use futures::future::{ok, err, Ready};
-use serde_derive::Deserialize;
-use rand;
+use actix_web;
+use futures;
+//use actix_web::{web, dev, App, Error, HttpRequest, FromRequest};
+//use actix_web::error::ErrorBadRequest;
+//use futures::future::{ok, err, Ready};
+//use serde_derive::Deserialize;
 
 /// Native implementation for PikePayload_Action
 #[derive(Debug, Clone, PartialEq)]
@@ -181,10 +182,11 @@ impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {
 
 impl ::actix_web::FromRequest for CreateAgentAction {
     type Error = ::actix_web::Error;
-    type Future = ::futures::future::MapOk<
-        ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>,
-        //Box<dyn FnOnce(RealSessionRepository) -> Box<(dyn SessionRepository)>>,
-    >;
+    type Future = ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>;
+    //type Future = ::futures::future::MapOk<
+    //    ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>,
+    //    Box<dyn FnOnce(RealSessionRepository) -> Box<(dyn SessionRepository)>>,
+    //>;
     type Config = ();
 
     fn from_request(
