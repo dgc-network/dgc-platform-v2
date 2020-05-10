@@ -179,40 +179,20 @@ impl IntoBytes for CreateAgentAction {
 impl IntoProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {}
 impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {}
 
-impl FromRequest for CreateAgentAction {
-    type Error = Error;
-    type Future = Ready<Result<Self, Self::Error>>;
+impl ::actix_web::FromRequest for CreateAgentAction {
+    type Error = ::actix_web::Error;
+    type Future = ::futures::future::MapOk<
+        ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>,
+        //Box<dyn FnOnce(RealSessionRepository) -> Box<(dyn SessionRepository)>>,
+    >;
     type Config = ();
 
     fn from_request(
         req: &::actix_web::HttpRequest,
         payload: &mut actix_web::dev::Payload,
     ) -> Self::Future {
-        CreateAgentAction::from_request(&req, payload).map_ok(|dep| Box::new(dep))
+        CreateAgentAction::from_request(&req, payload).map_ok(Box::new(|dep| Box::new(dep)))
     }
-/*
-    fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
-        Ok(CreateAgentAction {
-            org_id: req.get_org_id().to_string(),
-            public_key: req.get_public_key().to_string(),
-            active: req.get_active(),
-            roles: req.get_roles().to_vec(),
-            metadata: req
-                .get_metadata()
-                .to_vec()
-                .into_iter()
-                .map(KeyValueEntry::from_proto)
-                .collect::<Result<Vec<KeyValueEntry>, ProtoConversionError>>()?,
-        })
-
-        if rand::random() {
-            ok(CreateAgentAction { name: "thingy".into() })
-        } else {
-            err(ErrorBadRequest("no luck"))
-        }
-
-    }
-*/    
 }
 
 #[derive(Debug)]
