@@ -184,6 +184,13 @@ impl FromRequest for CreateAgentAction {
     type Future = Ready<Result<Self, Self::Error>>;
     type Config = ();
 
+    fn from_request(
+        req: &::actix_web::HttpRequest,
+        payload: &mut actix_web::dev::Payload,
+    ) -> Self::Future {
+        CreateAgentAction::from_request(&req, payload).map_ok(|dep| Box::new(dep))
+    }
+/*
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
         Ok(CreateAgentAction {
             org_id: req.get_org_id().to_string(),
@@ -197,6 +204,7 @@ impl FromRequest for CreateAgentAction {
                 .map(KeyValueEntry::from_proto)
                 .collect::<Result<Vec<KeyValueEntry>, ProtoConversionError>>()?,
         })
+*/        
 /*
         if rand::random() {
             ok(CreateAgentAction { name: "thingy".into() })
