@@ -194,7 +194,8 @@ impl ::actix_web::FromRequest for CreateAgentAction {
         req: &::actix_web::HttpRequest,
         payload: &mut actix_web::dev::Payload,
     ) -> Self::Future {
-        CreateAgentAction::from_request(&req, payload).map_ok(Box::new(|dep| Box::new(dep)))
+        //CreateAgentAction::from_request(&req, payload).map_ok(Box::new(|dep| Box::new(dep)))
+        CreateAgentAction::from_request(&req, payload).Box::new(dep)
     }
 }
 
