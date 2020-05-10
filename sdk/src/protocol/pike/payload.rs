@@ -180,6 +180,7 @@ impl IntoBytes for CreateAgentAction {
 impl IntoProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {}
 impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {}
 
+use futures_util::future::try_future::TryFutureExt;
 impl ::actix_web::FromRequest for CreateAgentAction {
     type Error = ::actix_web::Error;
     type Future = ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>;
