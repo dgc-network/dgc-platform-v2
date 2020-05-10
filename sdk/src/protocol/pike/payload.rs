@@ -204,15 +204,15 @@ impl FromRequest for CreateAgentAction {
                 .map(KeyValueEntry::from_proto)
                 .collect::<Result<Vec<KeyValueEntry>, ProtoConversionError>>()?,
         })
-*/        
-/*
+
         if rand::random() {
             ok(CreateAgentAction { name: "thingy".into() })
         } else {
             err(ErrorBadRequest("no luck"))
         }
-*/
+
     }
+*/    
 }
 
 #[derive(Debug)]
