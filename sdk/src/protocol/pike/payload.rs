@@ -180,7 +180,6 @@ impl IntoBytes for CreateAgentAction {
 impl IntoProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {}
 impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {}
 
-//use futures_util::future::try_future::TryFutureExt;
 impl ::actix_web::FromRequest for CreateAgentAction {
     type Error = ::actix_web::Error;
     type Future = ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>;
@@ -192,6 +191,7 @@ impl ::actix_web::FromRequest for CreateAgentAction {
     ) -> Self::Future {
         //CreateAgentAction::from_request(&req, payload).map_ok(Box::new(|dep| Box::new(dep)))
         CreateAgentAction::from_request(&req, payload)
+        .map(|dep| Box::new(dep))
     }
 }
 
