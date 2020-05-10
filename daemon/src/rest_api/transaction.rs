@@ -30,12 +30,13 @@ use sawtooth_sdk::messages::batch::BatchList;
 use sawtooth_sdk::messages::transaction::Transaction;
 use sawtooth_sdk::messages::transaction::TransactionHeader;
 use sawtooth_sdk::signing;
+use sawtooth_sdk::signing::Error as CliError;
 
 //use crate::key;
 use crate::rest_api::key;
 
 //use crate::CliError;
-use crate::rest_api::error::RestApiResponseError as CliError;
+//use crate::rest_api::error::RestApiResponseError as CliError;
 
 pub const PIKE_NAMESPACE: &str = "cad11d";
 const PIKE_FAMILY_NAME: &str = "pike";
