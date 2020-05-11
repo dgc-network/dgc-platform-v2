@@ -179,7 +179,7 @@ impl IntoBytes for CreateAgentAction {
 
 impl IntoProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {}
 impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {}
-
+/*
 impl ::actix_web::FromRequest for CreateAgentAction {
     type Error = ::actix_web::Error;
     type Future = ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>;
@@ -194,7 +194,7 @@ impl ::actix_web::FromRequest for CreateAgentAction {
         //.map(|dep| Box::new(dep))
     }
 }
-
+*/
 #[derive(Debug)]
 pub enum CreateAgentActionBuildError {
     MissingField(String),
