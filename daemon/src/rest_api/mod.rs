@@ -24,7 +24,7 @@ use actix::{Addr, SyncArbiter};
 use actix_web::{
     dev,
     error::{Error as ActixError, ErrorBadRequest, ErrorInternalServerError},
-    web, App, FromRequest, HttpRequest, HttpServer, Result,
+    web, App, FromRequest, HttpRequest, HttpResponse, HttpServer, Result,
 };
 use futures::executor::block_on;
 use futures::future;
@@ -137,8 +137,9 @@ pub fn run(
                     )
                     .service(
                         web::scope("/agent")
-                            .service(web::resource("").route(web::post().to(do_create_agent)))
-                            .service(web::resource("").route(web::put().to(do_update_agent)))
+                            .service(web::resource("").route(web::post().to(|| HttpResponse::Ok())))
+                            //.service(web::resource("").route(web::post().to(do_create_agent)))
+                            //.service(web::resource("").route(web::put().to(do_update_agent)))
                             .service(web::resource("").route(web::get().to(list_agents)))
                             .service(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
