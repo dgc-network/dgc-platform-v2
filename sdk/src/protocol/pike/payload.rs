@@ -181,6 +181,15 @@ impl IntoProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {}
 impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {}
 /*
 impl ::actix_web::FromRequest for CreateAgentAction {
+    type Config = PayloadConfig;
+    type Error = Error;
+    type Future = Ready<Result<Payload, Error>>;
+
+    #[inline]
+    fn from_request(_: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
+        ok(Payload(payload.take()))
+    }
+
     type Error = ::actix_web::Error;
     type Future = ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>;
     type Config = ();

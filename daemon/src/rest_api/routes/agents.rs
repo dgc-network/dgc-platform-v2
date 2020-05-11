@@ -1,25 +1,18 @@
-// Copyright 2019 Cargill Incorporated
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright (c) The dgc.network
+// SPDX-License-Identifier: Apache-2.0
 
 use crate::database::{helpers as db, models::Agent};
 use crate::rest_api::{
     error::RestApiResponseError, 
-    //error::CliError, 
     routes::DbExecutor, 
     AcceptServiceIdParam, 
     AppState, 
     QueryServiceId,
+};
+use crate::rest_api::transaction::{pike_batch_builder, PIKE_NAMESPACE};
+use grid_sdk::{
+    protocol::pike::payload::{Action, CreateAgentAction, PikePayloadBuilder, UpdateAgentAction},
+    protos::IntoProto,
 };
 
 use actix::{Handler, Message, SyncContext};
@@ -137,13 +130,6 @@ pub async fn fetch_agent(
         .map(|agent| HttpResponse::Ok().json(agent))
 }
 
-//use crate::error::CliError;
-//use crate::rest_api::http::submit_batches;
-use crate::rest_api::transaction::{pike_batch_builder, PIKE_NAMESPACE};
-use grid_sdk::{
-    protocol::pike::payload::{Action, CreateAgentAction, PikePayloadBuilder, UpdateAgentAction},
-    protos::IntoProto,
-};
 /*
 pub fn create_agent(
     url: &str,
@@ -171,22 +157,21 @@ pub fn create_agent(
     Ok(HttpResponse::Ok().json("status:done"))
 }
 */
+
 pub async fn do_create_agent(
     req: HttpRequest,
-    //body: web::Bytes,
+    body: web::Payload,
     state: web::Data<AppState>,
     key: Option<String>,
     create_agent: CreateAgentAction,
     query_service_id: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
 ) -> Result<HttpResponse, RestApiResponseError> {
-//) -> Result<HttpResponse, CliError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::CreateAgent)
         .with_create_agent(create_agent)
         .build()
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-        //.map_err(|err| CliError::UserError(format!("{}", err)))?;
 
     let batch_list = pike_batch_builder(key)
         .add_transaction(
