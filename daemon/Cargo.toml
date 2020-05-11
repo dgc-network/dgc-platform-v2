@@ -57,6 +57,7 @@ uuid = { version = "0.6", features = ["v4"] }
 rust-crypto = "0.2"
 users = "0.9"
 dirs = "1"
+serde_yaml = "0.8"
 
 [dependencies.splinter]
 git = "https://github.com/Cargill/splinter"

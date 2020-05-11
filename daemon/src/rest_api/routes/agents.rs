@@ -174,12 +174,14 @@ pub async fn do_create_agent(
     create_agent: CreateAgentAction,
     query_service_id: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
-) -> Result<HttpResponse, RestApiResponseError> {
+//) -> Result<HttpResponse, RestApiResponseError> {
+) -> Result<HttpResponse, CliError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::CreateAgent)
         .with_create_agent(create_agent)
         .build()
-        .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
+        //.map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
+        .map_err(|err| CliError::UserError(format!("{}", err)))?;
 
     let batch_list = pike_batch_builder(key)
         .add_transaction(
