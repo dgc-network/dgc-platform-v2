@@ -73,7 +73,7 @@ pub enum RestApiResponseError {
     //ProtobufError(protobuf::ProtobufError),
     //SigningError(signing::Error),
     //SendError(SendError),
-    //GridProtoError(protos::ProtoConversionError),
+    GridProtoError(protos::ProtoConversionError),
     //SabreProtoError(sabre_sdk::protos::ProtoConversionError),
 }
 
@@ -91,7 +91,7 @@ impl Error for RestApiResponseError {
             //RestApiResponseError::ProtobufError(err) => Some(err),
             //RestApiResponseError::SigningError(err) => Some(err),
             //RestApiResponseError::SendError(err) => Some(err),
-            //RestApiResponseError::GridProtoError(err) => Some(err),
+            RestApiResponseError::GridProtoError(err) => Some(err),
             //RestApiResponseError::SabreProtoError(err) => Some(err),
         }
     }
@@ -117,7 +117,7 @@ impl fmt::Display for RestApiResponseError {
             //RestApiResponseError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
             //RestApiResponseError::SigningError(ref err) => write!(f, "SigningError: {}", err),
             //RestApiResponseError::SendError(ref err) => write!(f, "SendError: {}", err),
-            //RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
+            RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
             //RestApiResponseError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
         }
     }
@@ -230,7 +230,7 @@ impl From<protobuf::ProtobufError> for RestApiResponseError {
         RestApiResponseError::ProtobufError(err)
     }
 }
-/*
+
 impl From<signing::Error> for RestApiResponseError {
     fn from(err: signing::Error) -> Self {
         RestApiResponseError::SigningError(err)
@@ -248,7 +248,7 @@ impl From<protos::ProtoConversionError> for RestApiResponseError {
         RestApiResponseError::GridProtoError(err)
     }
 }
-
+/*
 impl From<sabre_sdk::protos::ProtoConversionError> for RestApiResponseError {
     fn from(err: sabre_sdk::protos::ProtoConversionError) -> Self {
         RestApiResponseError::SabreProtoError(err)
