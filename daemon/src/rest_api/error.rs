@@ -231,19 +231,19 @@ impl From<diesel::result::Error> for RestApiResponseError {
 
 impl From<io::Error> for RestApiResponseError {
     fn from(err: io::Error) -> Self {
-        RestApiResponseError::IoError(err)
+        RestApiResponseError::IoError(err.to_string())
     }
 }
 
 impl From<protobuf::ProtobufError> for RestApiResponseError {
     fn from(err: protobuf::ProtobufError) -> Self {
-        RestApiResponseError::ProtobufError(err)
+        RestApiResponseError::ProtobufError(err.to_string())
     }
 }
 
 impl From<signing::Error> for RestApiResponseError {
     fn from(err: signing::Error) -> Self {
-        RestApiResponseError::SigningError(err)
+        RestApiResponseError::SigningError(err.to_string())
     }
 }
 /*
@@ -255,12 +255,12 @@ impl From<SendError> for RestApiResponseError {
 */
 impl From<protos::ProtoConversionError> for RestApiResponseError {
     fn from(err: protos::ProtoConversionError) -> Self {
-        RestApiResponseError::GridProtoError(err)
+        RestApiResponseError::GridProtoError(err.to_string())
     }
 }
 
 impl From<sabre_sdk::protos::ProtoConversionError> for RestApiResponseError {
     fn from(err: sabre_sdk::protos::ProtoConversionError) -> Self {
-        RestApiResponseError::SabreProtoError(err)
+        RestApiResponseError::SabreProtoError(err.to_string())
     }
 }

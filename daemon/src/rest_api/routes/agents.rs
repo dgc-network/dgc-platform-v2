@@ -15,7 +15,7 @@
 use crate::database::{helpers as db, models::Agent};
 use crate::rest_api::{
     error::RestApiResponseError, 
-    error::CliError, 
+    //error::CliError, 
     routes::DbExecutor, 
     AcceptServiceIdParam, 
     AppState, 
