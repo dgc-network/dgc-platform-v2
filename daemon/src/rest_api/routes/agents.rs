@@ -160,7 +160,8 @@ pub fn create_agent(
 
 pub async fn do_create_agent(
     req: HttpRequest,
-    body: web::Payload,
+    body: web::Bytes,
+    //body: web::Payload,
     state: web::Data<AppState>,
     key: Option<String>,
     create_agent: CreateAgentAction,
