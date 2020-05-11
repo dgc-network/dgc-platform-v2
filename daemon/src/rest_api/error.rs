@@ -28,7 +28,7 @@ use std::fmt;
 use grid_sdk::protos;
 use sawtooth_sdk::signing;
 use std::io;
-use sawtooth_sdk::messaging::stream::SendError;
+//use sawtooth_sdk::messaging::stream::SendError;
 
 #[derive(Debug)]
 pub enum RestApiServerError {
@@ -68,13 +68,13 @@ pub enum RestApiResponseError {
     RequestHandlerError(String),
     DatabaseError(String),
     NotFoundError(String),
-    UserError(String),
-    IoError(io::Error),
-    ProtobufError(protobuf::ProtobufError),
+    //UserError(String),
+    //IoError(io::Error),
+    //ProtobufError(protobuf::ProtobufError),
     //SigningError(signing::Error),
-    SendError(SendError),
-    GridProtoError(protos::ProtoConversionError),
-    SabreProtoError(sabre_sdk::protos::ProtoConversionError),
+    //SendError(SendError),
+    //GridProtoError(protos::ProtoConversionError),
+    //SabreProtoError(sabre_sdk::protos::ProtoConversionError),
 }
 
 impl Error for RestApiResponseError {
@@ -86,13 +86,13 @@ impl Error for RestApiResponseError {
             RestApiResponseError::RequestHandlerError(_) => None,
             RestApiResponseError::DatabaseError(_) => None,
             RestApiResponseError::NotFoundError(_) => None,
-            RestApiResponseError::UserError(_) => None,
-            RestApiResponseError::IoError(err) => Some(err),
-            RestApiResponseError::ProtobufError(err) => Some(err),
+            //RestApiResponseError::UserError(_) => None,
+            //RestApiResponseError::IoError(err) => Some(err),
+            //RestApiResponseError::ProtobufError(err) => Some(err),
             //RestApiResponseError::SigningError(err) => Some(err),
-            RestApiResponseError::SendError(err) => Some(err),
-            RestApiResponseError::GridProtoError(err) => Some(err),
-            RestApiResponseError::SabreProtoError(err) => Some(err),
+            //RestApiResponseError::SendError(err) => Some(err),
+            //RestApiResponseError::GridProtoError(err) => Some(err),
+            //RestApiResponseError::SabreProtoError(err) => Some(err),
         }
     }
 }
@@ -112,13 +112,13 @@ impl fmt::Display for RestApiResponseError {
             }
             RestApiResponseError::NotFoundError(ref s) => write!(f, "Not Found Error: {}", s),
             RestApiResponseError::DatabaseError(ref s) => write!(f, "Database Error: {}", s),
-            RestApiResponseError::UserError(ref err) => write!(f, "Error: {}", err),
-            RestApiResponseError::IoError(ref err) => write!(f, "IoError: {}", err),
-            RestApiResponseError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
+            //RestApiResponseError::UserError(ref err) => write!(f, "Error: {}", err),
+            //RestApiResponseError::IoError(ref err) => write!(f, "IoError: {}", err),
+            //RestApiResponseError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
             //RestApiResponseError::SigningError(ref err) => write!(f, "SigningError: {}", err),
-            RestApiResponseError::SendError(ref err) => write!(f, "SendError: {}", err),
-            RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
-            RestApiResponseError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
+            //RestApiResponseError::SendError(ref err) => write!(f, "SendError: {}", err),
+            //RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
+            //RestApiResponseError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
         }
     }
 }
@@ -218,7 +218,7 @@ impl From<diesel::result::Error> for RestApiResponseError {
         ))
     }
 }
-
+/*
 impl From<io::Error> for RestApiResponseError {
     fn from(err: io::Error) -> Self {
         RestApiResponseError::IoError(err)
@@ -252,5 +252,111 @@ impl From<protos::ProtoConversionError> for RestApiResponseError {
 impl From<sabre_sdk::protos::ProtoConversionError> for RestApiResponseError {
     fn from(err: sabre_sdk::protos::ProtoConversionError) -> Self {
         RestApiResponseError::SabreProtoError(err)
+    }
+}
+*/
+//use grid_sdk::protos;
+//use sawtooth_sdk::signing;
+use std::error::Error as StdError;
+//use std::io;
+
+#[derive(Debug)]
+pub enum CliError {
+    LoggingInitializationError(Box<flexi_logger::FlexiLoggerError>),
+    InvalidYamlError(String),
+    PayloadError(String),
+    UserError(String),
+    DatabaseError(String),
+    SigningError(signing::Error),
+    IoError(io::Error),
+    ProtobufError(protobuf::ProtobufError),
+    ReqwestError(reqwest::Error),
+    GridProtoError(protos::ProtoConversionError),
+    SabreProtoError(sabre_sdk::protos::ProtoConversionError),
+}
+
+impl StdError for CliError {
+    fn source(&self) -> Option<&(dyn StdError + 'static)> {
+        match self {
+            CliError::LoggingInitializationError(err) => Some(err),
+            CliError::InvalidYamlError(_) => None,
+            CliError::PayloadError(_) => None,
+            CliError::UserError(_) => None,
+            CliError::DatabaseError(_) => None,
+            CliError::IoError(err) => Some(err),
+            CliError::ProtobufError(err) => Some(err),
+            CliError::SigningError(err) => Some(err),
+            CliError::ReqwestError(err) => Some(err),
+            CliError::GridProtoError(err) => Some(err),
+            CliError::SabreProtoError(err) => Some(err),
+        }
+    }
+}
+
+impl std::fmt::Display for CliError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            CliError::UserError(ref err) => write!(f, "Error: {}", err),
+            CliError::InvalidYamlError(ref err) => write!(f, "InvalidYamlError: {}", err),
+            CliError::PayloadError(ref err) => write!(f, "PayloadError: {}", err),
+            CliError::IoError(ref err) => write!(f, "IoError: {}", err),
+            CliError::DatabaseError(ref err) => write!(f, "DatabaseError: {}", err),
+            CliError::SigningError(ref err) => write!(f, "SigningError: {}", err),
+            CliError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
+            CliError::LoggingInitializationError(ref err) => {
+                write!(f, "LoggingInitializationError: {}", err)
+            }
+            CliError::ReqwestError(ref err) => write!(f, "Reqwest Error: {}", err),
+            CliError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
+            CliError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
+        }
+    }
+}
+
+impl From<flexi_logger::FlexiLoggerError> for CliError {
+    fn from(err: flexi_logger::FlexiLoggerError) -> Self {
+        CliError::LoggingInitializationError(Box::new(err))
+    }
+}
+
+impl From<signing::Error> for CliError {
+    fn from(err: signing::Error) -> Self {
+        CliError::SigningError(err)
+    }
+}
+
+impl From<io::Error> for CliError {
+    fn from(err: io::Error) -> Self {
+        CliError::IoError(err)
+    }
+}
+
+impl From<serde_yaml::Error> for CliError {
+    fn from(err: serde_yaml::Error) -> Self {
+        CliError::InvalidYamlError(err.to_string())
+    }
+}
+
+impl From<protobuf::ProtobufError> for CliError {
+    fn from(err: protobuf::ProtobufError) -> Self {
+        CliError::ProtobufError(err)
+    }
+}
+
+impl From<reqwest::Error> for CliError {
+    fn from(err: reqwest::Error) -> Self {
+        CliError::ReqwestError(err)
+    }
+}
+
+impl From<protos::ProtoConversionError> for CliError {
+    fn from(err: protos::ProtoConversionError) -> Self {
+        CliError::GridProtoError(err)
+    }
+}
+
+impl From<sabre_sdk::protos::ProtoConversionError> for CliError {
+    fn from(err: sabre_sdk::protos::ProtoConversionError) -> Self {
+        CliError::SabreProtoError(err)
     }
 }
