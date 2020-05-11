@@ -193,7 +193,7 @@ pub async fn do_create_agent(
             &payload.into_proto()?,
             &[PIKE_NAMESPACE.to_string()],
             &[PIKE_NAMESPACE.to_string()],
-        )
+        )?
         .create_batch_list();
 
 /*
