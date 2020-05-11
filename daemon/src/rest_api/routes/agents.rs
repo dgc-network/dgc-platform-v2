@@ -14,7 +14,12 @@
 
 use crate::database::{helpers as db, models::Agent};
 use crate::rest_api::{
-    error::RestApiResponseError, routes::DbExecutor, AcceptServiceIdParam, AppState, QueryServiceId,
+    error::RestApiResponseError, 
+    error::CliError, 
+    routes::DbExecutor, 
+    AcceptServiceIdParam, 
+    AppState, 
+    QueryServiceId,
 };
 
 use actix::{Handler, Message, SyncContext};
