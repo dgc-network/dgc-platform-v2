@@ -167,6 +167,8 @@ pub async fn do_create_agent(
     query_service_id: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
 ) -> Result<HttpResponse, RestApiResponseError> {
+    HttpResponse::Ok().body("Hello world!")
+/*        
     let payload = PikePayloadBuilder::new()
         .with_action(Action::CreateAgent)
         .with_create_agent(create_agent)
@@ -203,6 +205,7 @@ pub async fn do_create_agent(
         })
         .await
         .map(|link| HttpResponse::Ok().json(link))
+*/
 }
 
 pub async fn do_update_agent(
