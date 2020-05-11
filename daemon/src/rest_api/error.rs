@@ -232,13 +232,13 @@ impl From<protobuf::ProtobufError> for RestApiResponseError {
         RestApiResponseError::ProtobufError(err)
     }
 }
-
+*/
 impl From<signing::Error> for RestApiResponseError {
     fn from(err: signing::Error) -> Self {
         RestApiResponseError::SigningError(err)
     }
 }
-
+/*
 impl From<SendError> for RestApiResponseError {
     fn from(err: SendError) -> Self {
         RestApiResponseError::SendError(err)
