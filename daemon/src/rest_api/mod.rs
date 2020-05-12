@@ -135,7 +135,6 @@ pub fn run(
                             .name("batch_statuses")
                             .route(web::get().to(get_batch_statuses)),
                     )
-                    .service(web::resource("/agent").route(web::post().to(|| HttpResponse::Ok())))
                     .service(
                         web::scope("/agent")
                             //.service(web::resource("").route(web::post().to(do_create_agent)))
@@ -145,6 +144,7 @@ pub fn run(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
                             ),
                     )
+                    .service(web::resource("/agent").route(web::post().to(|| HttpResponse::Ok())))
                     .service(
                         web::scope("/organization")
                             .service(web::resource("").route(web::get().to(list_organizations)))
