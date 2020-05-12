@@ -140,11 +140,12 @@ pub fn run(
                             //.service(web::resource("").route(web::post().to(do_create_agent)))
                             //.service(web::resource("").route(web::put().to(do_update_agent)))
                             .service(web::resource("").route(web::get().to(list_agents)))
+                            .service(web::resource("").route(web::post().to(|| HttpResponse::Ok())))
                             .service(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
                             ),
                     )
-                    .service(web::resource("/agent").route(web::post().to(|| HttpResponse::Ok())))
+                    .service(web::resource("/create_agent").route(web::post().to(|| HttpResponse::Ok())))
                     .service(
                         web::scope("/organization")
                             .service(web::resource("").route(web::get().to(list_organizations)))
