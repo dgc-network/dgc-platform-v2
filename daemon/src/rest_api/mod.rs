@@ -135,7 +135,7 @@ pub fn run(
                             .name("batch_statuses")
                             .route(web::get().to(get_batch_statuses)),
                     )
-                    .service(web::resource("/agent").route(web::post().to(|| HttpResponse::Ok())))
+                    //.service(web::resource("/agent").route(web::post().to(|| HttpResponse::Ok())))
                     .service(
                         web::scope("/agent")
                             //.service(web::resource("").route(web::post().to(do_create_agent)))
