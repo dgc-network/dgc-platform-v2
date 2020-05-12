@@ -136,11 +136,20 @@ pub fn run(
                             .route(web::get().to(get_batch_statuses)),
                     )
                     .service(
+                        web::resource("/agent1")
+                            //.name("agent")
+                            //.guard(guard::Header("content-type", "application/json"))
+                            .route(web::get().to(|| HttpResponse::Ok()))
+                            .route(web::put().to(|| HttpResponse::Ok())),
+                    )
+                    .service(
                         web::scope("/agent")
                             //.service(web::resource("").route(web::post().to(do_create_agent)))
                             //.service(web::resource("").route(web::put().to(do_update_agent)))
-                            .service(web::resource("").route(web::get().to(list_agents)))
-                            .service(web::resource("").route(web::post().to(|| HttpResponse::Ok())))
+                            .service(web::resource("")
+                                .route(web::get().to(list_agents)))
+                                .route(web::post().to(|| HttpResponse::Ok()))
+                                .route(web::put().to(|| HttpResponse::Ok()))
                             .service(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
                             ),
