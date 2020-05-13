@@ -1,16 +1,6 @@
-// Copyright 2019 Bitwise IO, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright (c) The dgc.network
+// SPDX-License-Identifier: Apache-2.0
+
 
 use crate::database::DatabaseError;
 
@@ -63,6 +53,12 @@ pub enum RestApiResponseError {
     RequestHandlerError(String),
     DatabaseError(String),
     NotFoundError(String),
+    UserError(String),
+    SigningError(String),
+    IoError(String),
+    ProtobufError(String),
+    GridProtoError(String),
+    SabreProtoError(String),
 }
 
 impl Error for RestApiResponseError {
@@ -74,6 +70,12 @@ impl Error for RestApiResponseError {
             RestApiResponseError::RequestHandlerError(_) => None,
             RestApiResponseError::DatabaseError(_) => None,
             RestApiResponseError::NotFoundError(_) => None,
+            RestApiResponseError::UserError(_) => None,
+            RestApiResponseError::SigningError(_) => None,
+            RestApiResponseError::IoError(_) => None,
+            RestApiResponseError::ProtobufError(_) => None,
+            RestApiResponseError::GridProtoError(_) => None,
+            RestApiResponseError::SabreProtoError(_) => None,
         }
     }
 }
@@ -93,6 +95,12 @@ impl fmt::Display for RestApiResponseError {
             }
             RestApiResponseError::NotFoundError(ref s) => write!(f, "Not Found Error: {}", s),
             RestApiResponseError::DatabaseError(ref s) => write!(f, "Database Error: {}", s),
+            RestApiResponseError::UserError(ref err) => write!(f, "Error: {}", err),
+            RestApiResponseError::IoError(ref err) => write!(f, "IoError: {}", err),
+            RestApiResponseError::SigningError(ref err) => write!(f, "SigningError: {}", err),
+            RestApiResponseError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
+            RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
+            RestApiResponseError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
         }
     }
 }
@@ -185,5 +193,41 @@ impl From<diesel::result::Error> for RestApiResponseError {
             "Database Result Error occured: {}",
             err.to_string()
         ))
+    }
+}
+
+impl From<signing::Error> for RestApiResponseError {
+    fn from(err: signing::Error) -> Self {
+        RestApiResponseError::SigningError(err)
+    }
+}
+
+impl From<io::Error> for RestApiResponseError {
+    fn from(err: io::Error) -> Self {
+        RestApiResponseError::IoError(err)
+    }
+}
+
+impl From<protobuf::ProtobufError> for RestApiResponseError {
+    fn from(err: protobuf::ProtobufError) -> Self {
+        RestApiResponseError::ProtobufError(err)
+    }
+}
+
+impl From<reqwest::Error> for CliError {
+    fn from(err: reqwest::Error) -> Self {
+        CliError::ReqwestError(err)
+    }
+}
+
+impl From<protos::ProtoConversionError> for CliError {
+    fn from(err: protos::ProtoConversionError) -> Self {
+        CliError::GridProtoError(err)
+    }
+}
+
+impl From<sabre_sdk::protos::ProtoConversionError> for CliError {
+    fn from(err: sabre_sdk::protos::ProtoConversionError) -> Self {
+        CliError::SabreProtoError(err)
     }
 }

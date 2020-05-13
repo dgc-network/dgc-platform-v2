@@ -3,6 +3,8 @@
 
 pub mod error;
 mod routes;
+mod key;
+mod transaction;
 
 use std::sync::mpsc;
 use std::thread;
