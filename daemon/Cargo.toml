@@ -52,6 +52,7 @@ serde_yaml = "0.8"
 git = "https://github.com/Cargill/splinter"
 optional = true
 features = [ "events", "scabbard-client" ]
+version = "0.3.18"
 
 [features]
 default = ["sawtooth-support"]
