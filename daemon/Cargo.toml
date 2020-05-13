@@ -50,8 +50,8 @@ serde_yaml = "0.8"
 
 [dependencies.splinter]
 git = "https://github.com/Cargill/splinter"
-#optional = true
-features = [ "events", "scabbard-client" ]
+optional = true
+#features = [ "events", "scabbard-client" ]
 
 [features]
 default = ["sawtooth-support"]
@@ -62,7 +62,7 @@ experimental = ["splinter-support"]
 
 sawtooth-support = []
 #splinter-support = ["splinter", "reqwest", "sabre-sdk", "transact", "transact/contract-archive"]
-splinter-support = ["transact", "transact/contract-archive"]
+splinter-support = ["splinter", "transact", "transact/contract-archive"]
 test-api = []
 
 [package.metadata.deb]
