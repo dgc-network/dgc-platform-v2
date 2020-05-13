@@ -157,11 +157,12 @@ use grid_sdk::{
 };
 
 pub async fn do_create_agent(
-    url: &str,
+    req: HttpRequest,
+    //url: &str,
     key: Option<String>,
-    wait: u64,
+    //wait: u64,
     create_agent: CreateAgentAction,
-    service_id: Option<String>,
+    //service_id: Option<String>,
     state: web::Data<AppState>,
     query: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
@@ -184,21 +185,30 @@ pub async fn do_create_agent(
 
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
+    let response_url = req.url_for_static("batch_statuses")?;
+
     state
-        .database_connection
-        .send(ListAgents {
+        .batch_submitter
+        .submit_batches(SubmitBatches {
+            batch_list,
+            response_url,
             service_id: query.into_inner().service_id,
         })
-        .await?
-        .map(|agents| HttpResponse::Ok().json(agents))
+        .await
+        .map(|link| HttpResponse::Ok().json(link))
 }
 
 pub async fn do_update_agent(
-    url: &str,
+    req: HttpRequest,
+    //body: web::Bytes,
+    //state: web::Data<AppState>,
+    //query_service_id: web::Query<QueryServiceId>,
+    //_: AcceptServiceIdParam,
+    //url: &str,
     key: Option<String>,
-    wait: u64,
+    //wait: u64,
     update_agent: UpdateAgentAction,
-    service_id: Option<String>,
+    //service_id: Option<String>,
     state: web::Data<AppState>,
     query: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
@@ -221,13 +231,17 @@ pub async fn do_update_agent(
 
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
+    let response_url = req.url_for_static("batch_statuses")?;
+
     state
-        .database_connection
-        .send(ListAgents {
+        .batch_submitter
+        .submit_batches(SubmitBatches {
+            batch_list,
+            response_url,
             service_id: query.into_inner().service_id,
         })
-        .await?
-        .map(|agents| HttpResponse::Ok().json(agents))
+        .await
+        .map(|link| HttpResponse::Ok().json(link))
 }
 
 pub async fn submit_batches_copy(
