@@ -1,19 +1,13 @@
 // Copyright (c) The dgc.network
 // SPDX-License-Identifier: Apache-2.0
 
-#[macro_use]
-extern crate clap;
-#[macro_use]
-extern crate diesel;
-#[macro_use]
-extern crate diesel_migrations;
-#[macro_use]
-extern crate log;
-#[macro_use]
-extern crate serde_json;
+#[macro_use] extern crate clap;
+#[macro_use] extern crate diesel;
+#[macro_use] extern crate diesel_migrations;
+#[macro_use] extern crate log;
+#[macro_use] extern crate serde_json;
 #[cfg(feature = "splinter-support")]
-#[macro_use]
-extern crate serde;
+#[macro_use] extern crate serde;
 
 mod config;
 mod database;
@@ -23,7 +17,7 @@ mod rest_api;
 #[cfg(feature = "sawtooth-support")]
 mod sawtooth;
 #[cfg(feature = "splinter-support")]
-mod splinter;
+//mod splinter;
 mod submitter;
 
 use std::process;
