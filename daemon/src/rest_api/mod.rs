@@ -148,8 +148,8 @@ pub fn run(
                             //.service(web::resource("").route(web::put().to(do_update_agent)))
                             .service(web::resource("")
                                 .route(web::get().to(list_agents)))
-                                .route(web::post().to(|| HttpResponse::Ok()))
-                                .route(web::put().to(|| HttpResponse::Ok()))
+                                //.route(web::post().to(|| HttpResponse::Ok()))
+                                //.route(web::put().to(|| HttpResponse::Ok()))
                             .service(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
                             ),
