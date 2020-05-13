@@ -1,24 +1,24 @@
-// Copyright (c) The dgc.network
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2019 Cargill Incorporated
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 use crate::database::{helpers as db, models::Agent};
 use crate::rest_api::{
-    error::RestApiResponseError, 
-    routes::DbExecutor, 
-    AcceptServiceIdParam, 
-    AppState, 
-    QueryServiceId,
-};
-use crate::rest_api::transaction::{pike_batch_builder, PIKE_NAMESPACE};
-use grid_sdk::{
-    protocol::pike::payload::{Action, CreateAgentAction, PikePayloadBuilder, UpdateAgentAction},
-    protos::IntoProto,
+    error::RestApiResponseError, routes::DbExecutor, AcceptServiceIdParam, AppState, QueryServiceId,
 };
 
 use actix::{Handler, Message, SyncContext};
-use actix_web::{web, HttpRequest, HttpResponse};
-use sawtooth_sdk::messages::batch::BatchList;
-use crate::submitter::{BatchStatusResponse, BatchStatuses, SubmitBatches, DEFAULT_TIME_OUT};
+use actix_web::{web, HttpResponse};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
@@ -129,139 +129,3 @@ pub async fn fetch_agent(
         .await?
         .map(|agent| HttpResponse::Ok().json(agent))
 }
-
-/*
-pub fn create_agent(
-    url: &str,
-    key: Option<String>,
-    wait: u64,
-    create_agent: CreateAgentAction,
-    service_id: Option<String>,
-) -> Result<HttpResponse, RestApiResponseError> {
-    let payload = PikePayloadBuilder::new()
-        .with_action(Action::CreateAgent)
-        .with_create_agent(create_agent)
-        .build()
-        .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-
-    let batch_list = pike_batch_builder(key)
-        .add_transaction(
-            &payload.into_proto()?,
-            &[PIKE_NAMESPACE.to_string()],
-            &[PIKE_NAMESPACE.to_string()],
-        )?
-        .create_batch_list();
-
-    submit_batches(url, wait, &batch_list, service_id.as_deref());
-
-    Ok(HttpResponse::Ok().json("status:done"))
-}
-*/
-
-pub async fn do_create_agent(
-    req: HttpRequest,
-    body: web::Bytes,
-    //body: web::Payload,
-    state: web::Data<AppState>,
-    key: Option<String>,
-    create_agent: CreateAgentAction,
-    query_service_id: web::Query<QueryServiceId>,
-    _: AcceptServiceIdParam,
-) -> Result<HttpResponse, RestApiResponseError> {
-    //HttpResponse::Ok().body("Hello world!").await
-/*        
-    let payload = PikePayloadBuilder::new()
-        .with_action(Action::CreateAgent)
-        .with_create_agent(create_agent)
-        .build()
-        .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-
-    let batch_list = pike_batch_builder(key)
-        .add_transaction(
-            &payload.into_proto()?,
-            &[PIKE_NAMESPACE.to_string()],
-            &[PIKE_NAMESPACE.to_string()],
-        )?
-        .create_batch_list();
-*/
-
-    let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
-        Ok(batch_list) => batch_list,
-        Err(err) => {
-            return Err(RestApiResponseError::BadRequest(format!(
-                "Protobuf message was badly formatted. {}",
-                err.to_string()
-            )));
-        }
-    };
-
-    let response_url = req.url_for_static("batch_statuses")?;
-
-    state
-        .batch_submitter
-        .submit_batches(SubmitBatches {
-            batch_list,
-            response_url,
-            service_id: query_service_id.into_inner().service_id,
-        })
-        .await
-        .map(|link| HttpResponse::Ok().json(link))
-
-}
-
-pub async fn do_update_agent(
-    req: HttpRequest,
-    body: web::Bytes,
-    state: web::Data<AppState>,
-    query_service_id: web::Query<QueryServiceId>,
-    _: AcceptServiceIdParam,
-) -> Result<HttpResponse, RestApiResponseError> {
-    let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
-        Ok(batch_list) => batch_list,
-        Err(err) => {
-            return Err(RestApiResponseError::BadRequest(format!(
-                "Protobuf message was badly formatted. {}",
-                err.to_string()
-            )));
-        }
-    };
-
-    let response_url = req.url_for_static("batch_statuses")?;
-
-    state
-        .batch_submitter
-        .submit_batches(SubmitBatches {
-            batch_list,
-            response_url,
-            service_id: query_service_id.into_inner().service_id,
-        })
-        .await
-        .map(|link| HttpResponse::Ok().json(link))
-}
-/*
-pub fn update_agent(
-    url: &str,
-    key: Option<String>,
-    wait: u64,
-    update_agent: UpdateAgentAction,
-    service_id: Option<String>,
-) -> Result<HttpResponse, RestApiResponseError> {
-    let payload = PikePayloadBuilder::new()
-        .with_action(Action::UpdateAgent)
-        .with_update_agent(update_agent)
-        .build()
-        .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-
-    let batch_list = pike_batch_builder(key)
-        .add_transaction(
-            &payload.into_proto()?,
-            &[PIKE_NAMESPACE.to_string()],
-            &[PIKE_NAMESPACE.to_string()],
-        )?
-        .create_batch_list();
-
-    submit_batches(url, wait, &batch_list, service_id.as_deref());
-
-    Ok(HttpResponse::Ok().json("status:done"))
-}
-*/

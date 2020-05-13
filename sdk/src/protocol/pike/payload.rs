@@ -23,13 +23,6 @@ use crate::protos::{
     FromBytes, FromNative, FromProto, IntoBytes, IntoNative, IntoProto, ProtoConversionError,
 };
 
-use actix_web;
-use futures;
-//use actix_web::{web, dev, App, Error, HttpRequest, FromRequest};
-//use actix_web::error::ErrorBadRequest;
-//use futures::future::{ok, err, Ready};
-//use serde_derive::Deserialize;
-
 /// Native implementation for PikePayload_Action
 #[derive(Debug, Clone, PartialEq)]
 pub enum Action {
@@ -179,31 +172,7 @@ impl IntoBytes for CreateAgentAction {
 
 impl IntoProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {}
 impl IntoNative<CreateAgentAction> for protos::pike_payload::CreateAgentAction {}
-/*
-impl ::actix_web::FromRequest for CreateAgentAction {
-    type Config = PayloadConfig;
-    type Error = Error;
-    type Future = Ready<Result<Payload, Error>>;
 
-    #[inline]
-    fn from_request(_: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
-        ok(Payload(payload.take()))
-    }
-
-    type Error = ::actix_web::Error;
-    type Future = ::futures::future::Ready<Result<CreateAgentAction, Self::Error>>;
-    type Config = ();
-
-    fn from_request(
-        req: &::actix_web::HttpRequest,
-        payload: &mut actix_web::dev::Payload,
-    ) -> Self::Future {
-        //CreateAgentAction::from_request(&req, payload).map_ok(Box::new(|dep| Box::new(dep)))
-        CreateAgentAction::from_request(&req, payload)
-        //.map(|dep| Box::new(dep))
-    }
-}
-*/
 #[derive(Debug)]
 pub enum CreateAgentActionBuildError {
     MissingField(String),

@@ -1,11 +1,19 @@
-// Copyright (c) The dgc.network
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2019 Bitwise IO, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 pub mod error;
 mod routes;
-//mod http;
-mod key;
-mod transaction;
 
 use std::sync::mpsc;
 use std::thread;
@@ -17,14 +25,14 @@ use crate::rest_api::routes::DbExecutor;
 use crate::rest_api::routes::{
     fetch_agent, fetch_grid_schema, fetch_organization, fetch_product, fetch_record,
     fetch_record_property, get_batch_statuses, list_agents, list_grid_schemas, list_organizations,
-    list_products, list_records, submit_batches, do_create_agent, do_update_agent,
+    list_products, list_records, submit_batches,
 };
 use crate::submitter::BatchSubmitter;
 use actix::{Addr, SyncArbiter};
 use actix_web::{
     dev,
     error::{Error as ActixError, ErrorBadRequest, ErrorInternalServerError},
-    web, App, FromRequest, HttpRequest, HttpResponse, HttpServer, Result,
+    web, App, FromRequest, HttpRequest, HttpServer, Result,
 };
 use futures::executor::block_on;
 use futures::future;
@@ -136,25 +144,12 @@ pub fn run(
                             .route(web::get().to(get_batch_statuses)),
                     )
                     .service(
-                        web::resource("/agent1")
-                            //.name("agent")
-                            //.guard(guard::Header("content-type", "application/json"))
-                            .route(web::get().to(|| HttpResponse::Ok()))
-                            .route(web::put().to(|| HttpResponse::Ok())),
-                    )
-                    .service(
                         web::scope("/agent")
-                            //.service(web::resource("").route(web::post().to(do_create_agent)))
-                            //.service(web::resource("").route(web::put().to(do_update_agent)))
-                            .service(web::resource("")
-                                .route(web::get().to(list_agents)))
-                                //.route(web::post().to(|| HttpResponse::Ok()))
-                                //.route(web::put().to(|| HttpResponse::Ok()))
+                            .service(web::resource("").route(web::get().to(list_agents)))
                             .service(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
                             ),
                     )
-                    .service(web::resource("/create_agent").route(web::post().to(|| HttpResponse::Ok())))
                     .service(
                         web::scope("/organization")
                             .service(web::resource("").route(web::get().to(list_organizations)))

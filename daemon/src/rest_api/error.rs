@@ -1,5 +1,16 @@
-// Copyright (c) The dgc.network
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2019 Bitwise IO, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 use crate::database::DatabaseError;
 
@@ -13,10 +24,6 @@ use futures::future::{Future, TryFutureExt};
 use std::error::Error;
 
 use std::fmt;
-
-use grid_sdk::protos;
-use sawtooth_sdk::signing;
-use std::io;
 
 #[derive(Debug)]
 pub enum RestApiServerError {
@@ -56,12 +63,6 @@ pub enum RestApiResponseError {
     RequestHandlerError(String),
     DatabaseError(String),
     NotFoundError(String),
-    UserError(String),
-    IoError(String),
-    ProtobufError(String),
-    SigningError(String),
-    GridProtoError(String),
-    SabreProtoError(String),
 }
 
 impl Error for RestApiResponseError {
@@ -73,12 +74,6 @@ impl Error for RestApiResponseError {
             RestApiResponseError::RequestHandlerError(_) => None,
             RestApiResponseError::DatabaseError(_) => None,
             RestApiResponseError::NotFoundError(_) => None,
-            RestApiResponseError::UserError(_) => None,
-            RestApiResponseError::IoError(_) => None,
-            RestApiResponseError::ProtobufError(_) => None,
-            RestApiResponseError::SigningError(_) => None,
-            RestApiResponseError::GridProtoError(_) => None,
-            RestApiResponseError::SabreProtoError(_) => None,
         }
     }
 }
@@ -98,12 +93,6 @@ impl fmt::Display for RestApiResponseError {
             }
             RestApiResponseError::NotFoundError(ref s) => write!(f, "Not Found Error: {}", s),
             RestApiResponseError::DatabaseError(ref s) => write!(f, "Database Error: {}", s),
-            RestApiResponseError::UserError(ref err) => write!(f, "Error: {}", err),
-            RestApiResponseError::IoError(ref err) => write!(f, "IoError: {}", err),
-            RestApiResponseError::ProtobufError(ref err) => write!(f, "ProtobufError: {}", err),
-            RestApiResponseError::SigningError(ref err) => write!(f, "SigningError: {}", err),
-            RestApiResponseError::GridProtoError(ref err) => write!(f, "Grid Proto Error: {}", err),
-            RestApiResponseError::SabreProtoError(ref err) => write!(f, "Sabre Proto Error: {}", err),
         }
     }
 }
@@ -126,9 +115,7 @@ impl RestApiResponseError {
                     .into_future(),
             ),
             RestApiResponseError::NotFoundError(ref message) => {
-                Box::new(HttpResponse::NotFound()
-                    .json(message)
-                    .into_future())
+                Box::new(HttpResponse::NotFound().json(message).into_future())
             }
             _ => Box::new(
                 HttpResponse::InternalServerError()
@@ -188,10 +175,7 @@ impl From<UrlGenerationError> for RestApiResponseError {
 
 impl From<DatabaseError> for RestApiResponseError {
     fn from(err: DatabaseError) -> RestApiResponseError {
-        RestApiResponseError::DatabaseError(format!(
-            "Database Error occured: {}", 
-            err.to_string()
-        ))
+        RestApiResponseError::DatabaseError(format!("Database Error occured: {}", err.to_string()))
     }
 }
 
@@ -201,35 +185,5 @@ impl From<diesel::result::Error> for RestApiResponseError {
             "Database Result Error occured: {}",
             err.to_string()
         ))
-    }
-}
-
-impl From<io::Error> for RestApiResponseError {
-    fn from(err: io::Error) -> Self {
-        RestApiResponseError::IoError(err.to_string())
-    }
-}
-
-impl From<protobuf::ProtobufError> for RestApiResponseError {
-    fn from(err: protobuf::ProtobufError) -> Self {
-        RestApiResponseError::ProtobufError(err.to_string())
-    }
-}
-
-impl From<signing::Error> for RestApiResponseError {
-    fn from(err: signing::Error) -> Self {
-        RestApiResponseError::SigningError(err.to_string())
-    }
-}
-
-impl From<protos::ProtoConversionError> for RestApiResponseError {
-    fn from(err: protos::ProtoConversionError) -> Self {
-        RestApiResponseError::GridProtoError(err.to_string())
-    }
-}
-
-impl From<sabre_sdk::protos::ProtoConversionError> for RestApiResponseError {
-    fn from(err: sabre_sdk::protos::ProtoConversionError) -> Self {
-        RestApiResponseError::SabreProtoError(err.to_string())
     }
 }
