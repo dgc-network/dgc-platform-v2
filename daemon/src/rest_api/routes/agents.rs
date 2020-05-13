@@ -228,3 +228,34 @@ pub async fn do_update_agent(
         .await?
         .map(|agents| HttpResponse::Ok().json(agents))
 }
+
+pub async fn submit_batches_copy(
+    req: HttpRequest,
+    body: web::Bytes,
+    state: web::Data<AppState>,
+    query_service_id: web::Query<QueryServiceId>,
+    _: AcceptServiceIdParam,
+) -> Result<HttpResponse, RestApiResponseError> {
+    let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
+        Ok(batch_list) => batch_list,
+        Err(err) => {
+            return Err(RestApiResponseError::BadRequest(format!(
+                "Protobuf message was badly formatted. {}",
+                err.to_string()
+            )));
+        }
+    };
+
+    let response_url = req.url_for_static("batch_statuses")?;
+
+    state
+        .batch_submitter
+        .submit_batches(SubmitBatches {
+            batch_list,
+            response_url,
+            service_id: query_service_id.into_inner().service_id,
+        })
+        .await
+        .map(|link| HttpResponse::Ok().json(link))
+}
+
