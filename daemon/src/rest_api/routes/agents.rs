@@ -161,7 +161,11 @@ pub async fn do_create_agent(
     wait: u64,
     create_agent: CreateAgentAction,
     service_id: Option<String>,
-) -> Result<(), CliError> {
+    state: web::Data<AppState>,
+    query: web::Query<QueryServiceId>,
+    _: AcceptServiceIdParam,
+//) -> Result<(), CliError> {
+) -> Result<HttpResponse, RestApiResponseError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::CreateAgent)
         .with_create_agent(create_agent)
@@ -176,7 +180,15 @@ pub async fn do_create_agent(
         )?
         .create_batch_list();
 
-    submit_batches(url, wait, &batch_list, service_id.as_deref())
+    //submit_batches(url, wait, &batch_list, service_id.as_deref())
+
+    state
+        .database_connection
+        .send(ListAgents {
+            service_id: query.into_inner().service_id,
+        })
+        .await?
+        .map(|agents| HttpResponse::Ok().json(agents))
 }
 
 pub async fn do_update_agent(
@@ -185,7 +197,11 @@ pub async fn do_update_agent(
     wait: u64,
     update_agent: UpdateAgentAction,
     service_id: Option<String>,
-) -> Result<(), CliError> {
+    state: web::Data<AppState>,
+    query: web::Query<QueryServiceId>,
+    _: AcceptServiceIdParam,
+//) -> Result<(), CliError> {
+) -> Result<HttpResponse, RestApiResponseError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::UpdateAgent)
         .with_update_agent(update_agent)
@@ -200,5 +216,13 @@ pub async fn do_update_agent(
         )?
         .create_batch_list();
 
-    submit_batches(url, wait, &batch_list, service_id.as_deref())
+    //submit_batches(url, wait, &batch_list, service_id.as_deref())
+
+    state
+        .database_connection
+        .send(ListAgents {
+            service_id: query.into_inner().service_id,
+        })
+        .await?
+        .map(|agents| HttpResponse::Ok().json(agents))
 }

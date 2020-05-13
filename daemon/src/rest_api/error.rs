@@ -15,6 +15,11 @@ use std::error::Error;
 
 use std::fmt;
 
+use grid_sdk::protos;
+use sawtooth_sdk::signing;
+//use std::error::Error as StdError;
+use std::io;
+
 #[derive(Debug)]
 pub enum RestApiServerError {
     StartUpError(String),
@@ -198,36 +203,30 @@ impl From<diesel::result::Error> for RestApiResponseError {
 
 impl From<signing::Error> for RestApiResponseError {
     fn from(err: signing::Error) -> Self {
-        RestApiResponseError::SigningError(err)
+        RestApiResponseError::SigningError(err.to_string())
     }
 }
 
 impl From<io::Error> for RestApiResponseError {
     fn from(err: io::Error) -> Self {
-        RestApiResponseError::IoError(err)
+        RestApiResponseError::IoError(err.to_string())
     }
 }
 
 impl From<protobuf::ProtobufError> for RestApiResponseError {
     fn from(err: protobuf::ProtobufError) -> Self {
-        RestApiResponseError::ProtobufError(err)
+        RestApiResponseError::ProtobufError(err.to_string())
     }
 }
 
-impl From<reqwest::Error> for CliError {
-    fn from(err: reqwest::Error) -> Self {
-        CliError::ReqwestError(err)
-    }
-}
-
-impl From<protos::ProtoConversionError> for CliError {
+impl From<protos::ProtoConversionError> for RestApiResponseError {
     fn from(err: protos::ProtoConversionError) -> Self {
-        CliError::GridProtoError(err)
+        RestApiResponseError::GridProtoError(err.to_string())
     }
 }
 
-impl From<sabre_sdk::protos::ProtoConversionError> for CliError {
+impl From<sabre_sdk::protos::ProtoConversionError> for RestApiResponseError {
     fn from(err: sabre_sdk::protos::ProtoConversionError) -> Self {
-        CliError::SabreProtoError(err)
+        RestApiResponseError::SabreProtoError(err.to_string())
     }
 }

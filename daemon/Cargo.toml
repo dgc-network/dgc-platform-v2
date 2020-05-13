@@ -45,6 +45,7 @@ url = "2.1"
 uuid = { version = "0.6", features = ["v4"] }
 
 users = "0.9"
+dirs = "1"
 rust-crypto = "0.2"
 
 [dependencies.splinter]
