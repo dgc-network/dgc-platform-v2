@@ -48,11 +48,10 @@ users = "0.9"
 dirs = "1"
 serde_yaml = "0.8"
 
-[dependencies.splinter]
-git = "https://github.com/Cargill/splinter"
-optional = true
+#[dependencies.splinter]
+#git = "https://github.com/Cargill/splinter"
+#optional = true
 #features = [ "events", "scabbard-client" ]
-features = [ "events" ]
 
 [features]
 default = ["sawtooth-support"]
