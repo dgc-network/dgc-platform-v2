@@ -133,13 +133,15 @@ pub fn run(
                             .route(web::get().to(get_batch_statuses)),
                     )
                     .service(web::resource("/agent_try")
-                        .route(web::post().to(list_agents)))
-                        .route(web::get().to(list_agents)))
+                        .route(web::post().to(list_agents))
+                        .route(web::get().to(list_agents)),
+                    )
                     .service(
                         web::scope("/agent")
                             .service(web::resource("")
-                                .route(web::post().to(list_agents)))
-                                .route(web::get().to(list_agents)))
+                                .route(web::post().to(list_agents))
+                                .route(web::get().to(list_agents)),
+                            )
                             .service(
                                 web::resource("/{public_key}").route(web::get().to(fetch_agent)),
                             ),
