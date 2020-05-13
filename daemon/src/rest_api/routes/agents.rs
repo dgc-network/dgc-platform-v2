@@ -129,3 +129,32 @@ pub async fn fetch_agent(
         .await?
         .map(|agent| HttpResponse::Ok().json(agent))
 }
+
+pub async fn create_agent(
+    state: web::Data<AppState>,
+    query: web::Query<QueryServiceId>,
+    _: AcceptServiceIdParam,
+) -> Result<HttpResponse, RestApiResponseError> {
+    state
+        .database_connection
+        .send(ListAgents {
+            service_id: query.into_inner().service_id,
+        })
+        .await?
+        .map(|agents| HttpResponse::Ok().json(agents))
+}
+
+pub async fn update_agent(
+    state: web::Data<AppState>,
+    query: web::Query<QueryServiceId>,
+    _: AcceptServiceIdParam,
+) -> Result<HttpResponse, RestApiResponseError> {
+    state
+        .database_connection
+        .send(ListAgents {
+            service_id: query.into_inner().service_id,
+        })
+        .await?
+        .map(|agents| HttpResponse::Ok().json(agents))
+}
+

@@ -14,7 +14,7 @@ use crate::rest_api::routes::DbExecutor;
 use crate::rest_api::routes::{
     fetch_agent, fetch_grid_schema, fetch_organization, fetch_product, fetch_record,
     fetch_record_property, get_batch_statuses, list_agents, list_grid_schemas, list_organizations,
-    list_products, list_records, submit_batches,
+    list_products, list_records, submit_batches, create_agent, update_agent,
 };
 use crate::submitter::BatchSubmitter;
 use actix::{Addr, SyncArbiter};
@@ -132,14 +132,11 @@ pub fn run(
                             .name("batch_statuses")
                             .route(web::get().to(get_batch_statuses)),
                     )
-                    .service(web::resource("/agent_try")
-                        .route(web::post().to(list_agents))
-                        .route(web::get().to(list_agents)),
-                    )
                     .service(
                         web::scope("/agent")
                             .service(web::resource("")
-                                .route(web::post().to(list_agents))
+                                .route(web::post().to(create_agent))
+                                .route(web::put().to(update_agent))
                                 .route(web::get().to(list_agents)),
                             )
                             .service(
