@@ -185,13 +185,13 @@ pub async fn do_create_agent(
 
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
-    let response_url = req.url_for_static("batch_statuses")?;
+    //let response_url = req.url_for_static("batch_statuses")?;
 
     state
         .batch_submitter
         .submit_batches(SubmitBatches {
             batch_list,
-            response_url,
+            //response_url,
             service_id: query.into_inner().service_id,
         })
         .await
@@ -231,13 +231,13 @@ pub async fn do_update_agent(
 
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
-    let response_url = req.url_for_static("batch_statuses")?;
+    //let response_url = req.url_for_static("batch_statuses")?;
 
     state
         .batch_submitter
         .submit_batches(SubmitBatches {
             batch_list,
-            response_url,
+            //response_url,
             service_id: query.into_inner().service_id,
         })
         .await
