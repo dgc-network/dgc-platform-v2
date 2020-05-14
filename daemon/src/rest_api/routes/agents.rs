@@ -225,13 +225,14 @@ pub async fn do_update_agent(
     _: AcceptServiceIdParam,
 //) -> Result<(), CliError> {
 ) -> Result<HttpResponse, RestApiResponseError> {
+/*    
     let payload = PikePayloadBuilder::new()
         .with_action(Action::UpdateAgent)
         .with_update_agent(update_agent)
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-/*
+
     let batch_list = pike_batch_builder(key)
         .add_transaction(
             &payload.into_proto()?,
