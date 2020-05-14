@@ -158,6 +158,7 @@ use grid_sdk::{
 
 pub async fn do_create_agent(
     req: HttpRequest,
+    body: web::Bytes,
     //url: &str,
     key: Option<String>,
     //wait: u64,
@@ -174,7 +175,7 @@ pub async fn do_create_agent(
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-
+/*
     let batch_list = pike_batch_builder(key)
         .add_transaction(
             &payload.into_proto()?,
@@ -182,10 +183,20 @@ pub async fn do_create_agent(
             &[PIKE_NAMESPACE.to_string()],
         )?
         .create_batch_list();
-
+*/
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
-    //let response_url = req.url_for_static("batch_statuses")?;
+    let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
+        Ok(batch_list) => batch_list,
+        Err(err) => {
+            return Err(RestApiResponseError::BadRequest(format!(
+                "Protobuf message was badly formatted. {}",
+                err.to_string()
+            )));
+        }
+    };
+
+    let response_url = req.url_for_static("batch_statuses")?;
 
     state
         .batch_submitter
@@ -200,7 +211,7 @@ pub async fn do_create_agent(
 
 pub async fn do_update_agent(
     req: HttpRequest,
-    //body: web::Bytes,
+    body: web::Bytes,
     //state: web::Data<AppState>,
     //query_service_id: web::Query<QueryServiceId>,
     //_: AcceptServiceIdParam,
@@ -220,7 +231,7 @@ pub async fn do_update_agent(
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-
+/*
     let batch_list = pike_batch_builder(key)
         .add_transaction(
             &payload.into_proto()?,
@@ -228,16 +239,26 @@ pub async fn do_update_agent(
             &[PIKE_NAMESPACE.to_string()],
         )?
         .create_batch_list();
-
+*/
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
-    //let response_url = req.url_for_static("batch_statuses")?;
+    let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
+        Ok(batch_list) => batch_list,
+        Err(err) => {
+            return Err(RestApiResponseError::BadRequest(format!(
+                "Protobuf message was badly formatted. {}",
+                err.to_string()
+            )));
+        }
+    };
+
+    let response_url = req.url_for_static("batch_statuses")?;
 
     state
         .batch_submitter
         .submit_batches(SubmitBatches {
             batch_list,
-            //response_url,
+            response_url,
             service_id: query.into_inner().service_id,
         })
         .await
