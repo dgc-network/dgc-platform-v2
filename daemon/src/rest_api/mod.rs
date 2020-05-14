@@ -137,7 +137,7 @@ pub fn run(
                     .service(
                         web::scope("/agent")
                             .service(web::resource("")
-                                .route(web::post().to(submit_batches_copy))
+                                .route(web::post().to(do_create_agent))
                                 .route(web::put().to(do_update_agent))
                                 .route(web::get().to(list_agents)),
                             )

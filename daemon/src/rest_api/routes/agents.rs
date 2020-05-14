@@ -218,7 +218,7 @@ pub async fn do_update_agent(
     //url: &str,
     key: Option<String>,
     //wait: u64,
-    update_agent: UpdateAgentAction,
+    //update_agent: UpdateAgentAction,
     //service_id: Option<String>,
     state: web::Data<AppState>,
     query: web::Query<QueryServiceId>,
