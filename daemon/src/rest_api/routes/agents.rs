@@ -172,7 +172,7 @@ pub async fn do_create_agent(
 ) -> Result<HttpResponse, RestApiResponseError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::CreateAgent)
-        .with_create_agent(create_agent)
+        .with_create_agent(create_agent.into_inner())
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
