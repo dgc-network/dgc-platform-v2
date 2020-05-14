@@ -8,7 +8,7 @@ use crate::rest_api::{
 use crate::submitter::SubmitBatches;
 use sawtooth_sdk::messages::batch::BatchList;
 use actix::{Handler, Message, SyncContext};
-use actix_web::{web, HttpRequest, HttpResponse};
+use actix_web::{web, HttpRequest, HttpResponse, Json};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
@@ -162,7 +162,7 @@ pub async fn do_create_agent(
     //url: &str,
     key: Option<String>,
     //wait: u64,
-    create_agent: CreateAgentAction,
+    create_agent: Json(CreateAgentAction),
     //service_id: Option<String>,
     state: web::Data<AppState>,
     query: web::Query<QueryServiceId>,
