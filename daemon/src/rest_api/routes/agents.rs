@@ -8,7 +8,8 @@ use crate::rest_api::{
 use crate::submitter::SubmitBatches;
 use sawtooth_sdk::messages::batch::BatchList;
 use actix::{Handler, Message, SyncContext};
-use actix_web::{web, HttpRequest, HttpResponse, Json};
+use actix_web::{web, HttpRequest, HttpResponse};
+use actix_web::web::Json;
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
@@ -175,7 +176,7 @@ pub async fn do_create_agent(
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
-/*
+
     let batch_list = pike_batch_builder(key)
         .add_transaction(
             &payload.into_proto()?,
@@ -183,7 +184,7 @@ pub async fn do_create_agent(
             &[PIKE_NAMESPACE.to_string()],
         )?
         .create_batch_list();
-*/
+
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
     let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
