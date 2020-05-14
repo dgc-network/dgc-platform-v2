@@ -202,7 +202,7 @@ pub async fn do_create_agent(
         .batch_submitter
         .submit_batches(SubmitBatches {
             batch_list,
-            //response_url,
+            response_url,
             service_id: query.into_inner().service_id,
         })
         .await
