@@ -107,19 +107,9 @@ impl FromRequest for CreateAgentAction {
     /// Convert request to a Self
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
         CreateAgentAction::from_request(&req, payload)
-        //CreateAgentAction::from_request(req, payload)
-            .then(|res| match res {
-                Ok(v) => ok(Ok(v)),
-                Err(e) => ok(Err(e)),
-            })
     }
 /*
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
-        //if rand::random() {
-        //    ok(CreateAgentAction { org_id: "thingy".into() })
-        //} else {
-        //    err(ErrorBadRequest("no luck"))
-        //}
         ok(CreateAgentAction { 
             org_id: "thingy".into(),
             public_key: "thingy".into(),
@@ -319,6 +309,17 @@ impl UpdateAgentAction {
 
     pub fn metadata(&self) -> &[KeyValueEntry] {
         &self.metadata
+    }
+}
+
+impl FromRequest for UpdateAgentAction {
+    type Error = Error;
+    type Future = Ready<Result<UpdateAgentAction, Error>>;
+    type Config = ();
+
+    /// Convert request to a Self
+    fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
+        UpdateAgentAction::from_request(&req, payload)
     }
 }
 
