@@ -105,7 +105,9 @@ impl FromRequest for CreateAgentAction {
     type Config = ();
 
     /// Convert request to a Self
-    fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future;
+    fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
+        ok(CreateAgentAction {}) 
+    }
 /*
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
         //if rand::random() {
