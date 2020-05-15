@@ -104,6 +104,9 @@ impl FromRequest for CreateAgentAction {
     type Future = Ready<Result<CreateAgentAction, Error>>;
     type Config = ();
 
+    /// Convert request to a Self
+    fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future;
+/*
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
         //if rand::random() {
         //    ok(CreateAgentAction { org_id: "thingy".into() })
@@ -118,6 +121,7 @@ impl FromRequest for CreateAgentAction {
             metadata: "thingy".into(),
         })
     }
+*/    
 }
 
 impl FromProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {
