@@ -108,10 +108,10 @@ impl FromRequest for CreateAgentAction {
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
         CreateAgentAction::from_request(&req, payload)
         //CreateAgentAction::from_request(req, payload)
-        //    .then(|res| match res {
-        //        Ok(v) => ok(Ok(v)),
-        //        Err(e) => ok(Err(e)),
-        //    })
+            .then(|res| match res {
+                Ok(v) => ok(Ok(v)),
+                Err(e) => ok(Err(e)),
+            })
     }
 /*
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
