@@ -9,7 +9,7 @@ use crate::submitter::SubmitBatches;
 use sawtooth_sdk::messages::batch::BatchList;
 use actix::{Handler, Message, SyncContext};
 use actix_web::{web, HttpRequest, HttpResponse};
-use actix_web::web::Json;
+//use actix_web::web::Json;
 use serde::{Deserialize, Serialize};
 use serde_json::Value as JsonValue;
 
@@ -121,34 +121,6 @@ pub async fn fetch_agent(
         .map(|agent| HttpResponse::Ok().json(agent))
 }
 
-pub async fn create_agent(
-    state: web::Data<AppState>,
-    query: web::Query<QueryServiceId>,
-    _: AcceptServiceIdParam,
-) -> Result<HttpResponse, RestApiResponseError> {
-    state
-        .database_connection
-        .send(ListAgents {
-            service_id: query.into_inner().service_id,
-        })
-        .await?
-        .map(|agents| HttpResponse::Ok().json(agents))
-}
-
-pub async fn update_agent(
-    state: web::Data<AppState>,
-    query: web::Query<QueryServiceId>,
-    _: AcceptServiceIdParam,
-) -> Result<HttpResponse, RestApiResponseError> {
-    state
-        .database_connection
-        .send(ListAgents {
-            service_id: query.into_inner().service_id,
-        })
-        .await?
-        .map(|agents| HttpResponse::Ok().json(agents))
-}
-
 //use crate::error::CliError;
 //use crate::http::submit_batches;
 use crate::rest_api::transaction::{pike_batch_builder, PIKE_NAMESPACE};
@@ -225,7 +197,7 @@ pub async fn do_update_agent(
     //url: &str,
     key: Option<String>,
     //wait: u64,
-    //update_agent: UpdateAgentAction,
+    update_agent: web::Json<UpdateAgentAction>,
     //service_id: Option<String>,
 
     state: web::Data<AppState>,
@@ -236,7 +208,7 @@ pub async fn do_update_agent(
    
     let payload = PikePayloadBuilder::new()
         .with_action(Action::UpdateAgent)
-        .with_update_agent(update_agent)
+        .with_update_agent(update_agent.into_inner())
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
