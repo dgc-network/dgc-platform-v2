@@ -93,6 +93,20 @@ impl CreateAgentAction {
     }
 }
 
+impl FromRequest for CreateAgentAction {
+    type Error = Error;
+    type Future = Ready<Result<CreateAgentAction, Error>>;
+    type Config = ();
+
+    fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
+        if rand::random() {
+            ok(CreateAgentAction { org_id: "thingy".into() })
+        } else {
+            err(ErrorBadRequest("no luck"))
+        }
+    }
+}
+
 impl FromProto<protos::pike_payload::CreateAgentAction> for CreateAgentAction {
     fn from_proto(
         create_agent: protos::pike_payload::CreateAgentAction,
