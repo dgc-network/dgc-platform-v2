@@ -139,7 +139,7 @@ pub async fn do_create_agent(
     //url: &str,
     key: Option<String>,
     //wait: u64,
-    create_agent: web::Json<CreateAgentAction>,
+    create_agent: web::Query<CreateAgentAction>,
     //service_id: Option<String>,
 
     state: web::Data<AppState>,
