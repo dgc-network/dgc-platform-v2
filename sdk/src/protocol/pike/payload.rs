@@ -106,7 +106,7 @@ impl FromRequest for CreateAgentAction {
 
     /// Convert request to a Self
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
-        ok(CreateAgentAction {}) 
+        ok(CreateAgentAction {*}) 
     }
 /*
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
