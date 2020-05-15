@@ -96,8 +96,8 @@ impl CreateAgentAction {
 use actix_web::{web, dev, App, Result, Error, HttpRequest, FromRequest};
 use actix_web::error::ErrorBadRequest;
 use futures::future::{ok, err, Ready};
-use serde_derive::Deserialize;
-use rand;
+//use serde_derive::Deserialize;
+//use rand;
 
 impl FromRequest for CreateAgentAction {
     type Error = Error;
@@ -105,11 +105,18 @@ impl FromRequest for CreateAgentAction {
     type Config = ();
 
     fn from_request(req: &HttpRequest, payload: &mut dev::Payload) -> Self::Future {
-        if rand::random() {
-            ok(CreateAgentAction { org_id: "thingy".into() })
-        } else {
-            err(ErrorBadRequest("no luck"))
-        }
+        //if rand::random() {
+        //    ok(CreateAgentAction { org_id: "thingy".into() })
+        //} else {
+        //    err(ErrorBadRequest("no luck"))
+        //}
+        ok(CreateAgentAction { 
+            org_id: "thingy".into(),
+            public_key: "thingy".into(),
+            active: "thingy".into(),
+            roles: "thingy".into(),
+            metadata: "thingy".into(),
+        })
     }
 }
 
