@@ -139,7 +139,7 @@ pub async fn do_create_agent(
     //url: &str,
     key: Option<String>,
     //wait: u64,
-    create_agent: web::Query<CreateAgentAction>,
+    create_agent: CreateAgentAction,
     //service_id: Option<String>,
 
     state: web::Data<AppState>,
@@ -149,7 +149,7 @@ pub async fn do_create_agent(
 ) -> Result<HttpResponse, RestApiResponseError> {
     let payload = PikePayloadBuilder::new()
         .with_action(Action::CreateAgent)
-        .with_create_agent(create_agent.into_inner())
+        .with_create_agent(create_agent)
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
@@ -197,7 +197,7 @@ pub async fn do_update_agent(
     //url: &str,
     key: Option<String>,
     //wait: u64,
-    update_agent: web::Json<UpdateAgentAction>,
+    update_agent: UpdateAgentAction,
     //service_id: Option<String>,
 
     state: web::Data<AppState>,
@@ -208,7 +208,7 @@ pub async fn do_update_agent(
    
     let payload = PikePayloadBuilder::new()
         .with_action(Action::UpdateAgent)
-        .with_update_agent(update_agent.into_inner())
+        .with_update_agent(update_agent)
         .build()
         //.map_err(|err| CliError::UserError(format!("{}", err)))?;
         .map_err(|err| RestApiResponseError::UserError(format!("{}", err)))?;
