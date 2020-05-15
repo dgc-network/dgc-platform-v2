@@ -96,8 +96,8 @@ impl CreateAgentAction {
 use actix_web::{web, dev, App, Result, Error, HttpRequest, FromRequest};
 use actix_web::error::ErrorBadRequest;
 use futures::future::{ok, err, Ready};
-//use serde_derive::Deserialize;
-//use rand;
+use serde_derive::Deserialize;
+use rand;
 
 impl FromRequest for CreateAgentAction {
     type Error = Error;
