@@ -159,12 +159,17 @@ use grid_sdk::{
 
 pub async fn do_create_agent(
     req: HttpRequest,
-    body: web::Bytes,
+    //body: web::Bytes,
+    //state: web::Data<AppState>,
+    //query_service_id: web::Query<QueryServiceId>,
+    //_: AcceptServiceIdParam,
+
     //url: &str,
     key: Option<String>,
     //wait: u64,
-    create_agent: Json<CreateAgentAction>,
+    create_agent: web::Json<CreateAgentAction>,
     //service_id: Option<String>,
+
     state: web::Data<AppState>,
     query: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
@@ -186,7 +191,7 @@ pub async fn do_create_agent(
         .create_batch_list();
 
     //submit_batches(url, wait, &batch_list, service_id.as_deref())
-
+/*
     let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
         Ok(batch_list) => batch_list,
         Err(err) => {
@@ -196,7 +201,7 @@ pub async fn do_create_agent(
             )));
         }
     };
-
+*/
     let response_url = req.url_for_static("batch_statuses")?;
 
     state
@@ -212,21 +217,23 @@ pub async fn do_create_agent(
 
 pub async fn do_update_agent(
     req: HttpRequest,
-    body: web::Bytes,
+    //body: web::Bytes,
     //state: web::Data<AppState>,
     //query_service_id: web::Query<QueryServiceId>,
     //_: AcceptServiceIdParam,
+
     //url: &str,
     key: Option<String>,
     //wait: u64,
     //update_agent: UpdateAgentAction,
     //service_id: Option<String>,
+
     state: web::Data<AppState>,
     query: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
 //) -> Result<(), CliError> {
 ) -> Result<HttpResponse, RestApiResponseError> {
-/*    
+   
     let payload = PikePayloadBuilder::new()
         .with_action(Action::UpdateAgent)
         .with_update_agent(update_agent)
@@ -241,9 +248,9 @@ pub async fn do_update_agent(
             &[PIKE_NAMESPACE.to_string()],
         )?
         .create_batch_list();
-*/
-    //submit_batches(url, wait, &batch_list, service_id.as_deref())
 
+    //submit_batches(url, wait, &batch_list, service_id.as_deref())
+/*
     let batch_list: BatchList = match protobuf::parse_from_bytes(&*body) {
         Ok(batch_list) => batch_list,
         Err(err) => {
@@ -253,7 +260,7 @@ pub async fn do_update_agent(
             )));
         }
     };
-
+*/
     let response_url = req.url_for_static("batch_statuses")?;
 
     state
