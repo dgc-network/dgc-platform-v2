@@ -125,7 +125,8 @@ pub async fn fetch_agent(
 //use crate::http::submit_batches;
 use crate::rest_api::transaction::{pike_batch_builder, PIKE_NAMESPACE};
 use grid_sdk::{
-    protocol::pike::payload::{Action, CreateAgentAction, PikePayloadBuilder, UpdateAgentAction},
+    protocol::pike::payload::{
+        Action, CreateAgentAction, PikePayloadBuilder, UpdateAgentAction},
     protos::IntoProto,
 };
 
@@ -145,6 +146,7 @@ pub async fn do_create_agent(
     state: web::Data<AppState>,
     query: web::Query<QueryServiceId>,
     _: AcceptServiceIdParam,
+    
 //) -> Result<(), CliError> {
 ) -> Result<HttpResponse, RestApiResponseError> {
     let payload = PikePayloadBuilder::new()
