@@ -168,12 +168,12 @@ services:
         - CARGO_ARGS=${CARGO_ARGS}
         - REPO_VERSION=${REPO_VERSION}
     expose:
-      - 8080
+      - 8088
     ports:
-      - '8080:8080'
+      - '8088:8088'
     entrypoint: |
         bash -c "
-          dgcd -vv -b dgcd:8080 -C tcp://validator:4004
+          dgcd -vv -b dgcd:8088 -C tcp://validator:4004
         "
 
   gridd:
