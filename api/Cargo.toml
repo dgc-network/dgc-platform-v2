@@ -1,0 +1,6 @@
+# Copyright (c) The dgc.network
+# SPDX-License-Identifier: Apache-2.0
+
+[dependencies]
+actix-web = "2.0"
+actix-rt = "1.0"

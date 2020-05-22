@@ -158,6 +158,24 @@ services:
         --connect tcp://validator:4004
         --bind rest-api:8008
 
+  dgc-api:
+    image: dgc-api:${ISOLATION_ID}
+    container_name: dgc-api
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+      args:
+        - CARGO_ARGS=${CARGO_ARGS}
+        - REPO_VERSION=${REPO_VERSION}
+    expose:
+      - 8080
+    ports:
+      - '8080:8080'
+    entrypoint: |
+        bash -c "
+          dgcd -vv -b dgcd:8080 -C tcp://validator:4004
+        "
+
   gridd:
     image: gridd:${ISOLATION_ID}
     container_name: gridd
